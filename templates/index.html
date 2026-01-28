@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}EcoPackAI - AI-Powered Sustainable Packaging{% endblock %}
+
+{% block content %}
+<style>
+    .hero {
+        padding: 140px 0 120px;
+        background: radial-gradient(circle at 80% 20%, rgba(25, 135, 84, 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 20% 80%, rgba(13, 110, 253, 0.08) 0%, transparent 40%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-shape {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: linear-gradient(135deg, rgba(25, 135, 84, 0.05), rgba(32, 201, 151, 0.05));
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+        animation: float 10s ease-in-out infinite;
+    }
+
+    .hero-shape-1 {
+        top: -100px;
+        right: -100px;
+    }
+
+    .hero-shape-2 {
+        bottom: -100px;
+        left: -100px;
+        animation-delay: -5s;
+    }
+
+    .feature-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.4));
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon-wrapper {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .count-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .count-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<div class="hero page-enter">
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+
+    <div class="container position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0 slide-up">
+                <span
+                    class="badge bg-success bg-opacity-10 text-success mb-3 px-3 py-2 rounded-pill fw-bold border border-success border-opacity-25">
+                    <i class="fas fa-magic me-2"></i>Powered by AI
+                </span>
+                <h1 class="display-3 fw-bold mb-4 ls-tight">
+                    Sustainable Packaging <br>
+                    <span class="text-gradient">Made Intelligent</span>
+                </h1>
+                <p class="lead text-muted mb-5 pe-lg-5" style="font-size: 1.25rem;">
+                    EcoPackAI uses advanced machine learning to recommend eco-friendly packaging materials that reduce
+                    environmental impact while maintaining product safety and cost efficiency.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if current_user.is_authenticated %}
+                    <a href="/dashboard" class="btn btn-success btn-lg px-5 shadow-lg">
+                        <i class="fas fa-columns me-2"></i>Go to Dashboard
+                    </a>
+                    {% else %}
+                    <a href="/signup" class="btn btn-success btn-lg px-5 shadow-lg">
+                        <i class="fas fa-rocket me-2"></i>Get Started Free
+                    </a>
+                    <a href="/login" class="btn btn-white btn-lg px-5 shadow-sm text-dark border">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-6 slide-up" style="animation-delay: 0.2s;">
+                <div class="row g-4">
+                    <div class="col-6">
+                        <div class="count-card mb-4">
+                            <i class="fas fa-leaf text-success fa-2x mb-3"></i>
+                            <h3 class="fw-bold mb-1">80%</h3>
+                            <p class="text-muted small mb-0">Less CO₂ Emissions</p>
+                        </div>
+                        <div class="count-card">
+                            <i class="fas fa-dollar-sign text-primary fa-2x mb-3"></i>
+                            <h3 class="fw-bold mb-1">30%</h3>
+                            <p class="text-muted small mb-0">Cost Savings</p>
+                        </div>
+                    </div>
+                    <div class="col-6 mt-5">
+                        <div class="count-card mb-4">
+                            <i class="fas fa-recycle text-info fa-2x mb-3"></i>
+                            <h3 class="fw-bold mb-1">95%</h3>
+                            <p class="text-muted small mb-0">Recyclability</p>
+                        </div>
+                        <div class="count-card">
+                            <i class="fas fa-check-circle text-warning fa-2x mb-3"></i>
+                            <h3 class="fw-bold mb-1">100%</h3>
+                            <p class="text-muted small mb-0">Food Safe</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="text-center mb-5 slide-up">
+            <h2 class="fw-bold display-6 mb-3">Why Choose EcoPackAI?</h2>
+            <p class="text-muted lead">Transforming packaging decisions with data-driven insights</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6 slide-up" style="animation-delay: 0.1s;">
+                <div class="feature-card h-100 text-center border-0 bg-transparent">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-cloud text-success fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Reduce CO₂ Emissions</h5>
+                    <p class="text-muted mb-0">Up to 80% reduction in carbon footprint through optimized material
+                        selection.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 slide-up" style="animation-delay: 0.2s;">
+                <div class="feature-card h-100 text-center border-0 bg-transparent">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-coins text-primary fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Save Costs</h5>
+                    <p class="text-muted mb-0">Intelligent selection algorithms that find the most cost-effective
+                        eco-materials.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 slide-up" style="animation-delay: 0.3s;">
+                <div class="feature-card h-100 text-center border-0 bg-transparent">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-recycle text-info fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Increase Recyclability</h5>
+                    <p class="text-muted mb-0">Prioritize materials with established recycling streams and higher
+                        recovery rates.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 slide-up" style="animation-delay: 0.4s;">
+                <div class="feature-card h-100 text-center border-0 bg-transparent">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-shield-alt text-warning fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Ensure Food Safety</h5>
+                    <p class="text-muted mb-0">All recommendations are strictly compliant with food safety regulations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5 section-gradient text-white" style="background: linear-gradient(135deg, #0f5132 0%, #198754 100%);">
+    <div class="container py-5">
+        <div class="text-center mb-5 slide-up">
+            <h2 class="fw-bold display-6 mb-3">How It Works</h2>
+            <p class="lead opacity-75">Simple three-step process to sustainable packaging</p>
+        </div>
+
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-4 text-center slide-up" style="animation-delay: 0.1s;">
+                <div class="bg-white bg-opacity-10 p-4 rounded-4 backdrop-blur mb-4 position-relative">
+                    <span
+                        class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-white text-success fs-5 shadow-sm border"
+                        style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">1</span>
+                    <i class="fas fa-keyboard fa-3x mb-4 mt-2"></i>
+                    <h4 class="fw-bold">Input Product Details</h4>
+                    <p class="opacity-75 mb-0">Enter specifications including type, weight, fragility, and temperature
+                        requirements.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 text-center slide-up" style="animation-delay: 0.2s;">
+                <div
+                    class="bg-white bg-opacity-25 p-4 rounded-4 backdrop-blur mb-4 position-relative shadow-lg transform-scale border border-white border-opacity-25">
+                    <span
+                        class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-white text-success fs-5 shadow-sm border"
+                        style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">2</span>
+                    <i class="fas fa-brain fa-3x mb-4 mt-2"></i>
+                    <h4 class="fw-bold">AI Analysis</h4>
+                    <p class="opacity-75 mb-0">Our ML models analyze 80+ materials to find the perfect balance of
+                        sustainability & cost.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 text-center slide-up" style="animation-delay: 0.3s;">
+                <div class="bg-white bg-opacity-10 p-4 rounded-4 backdrop-blur mb-4 position-relative">
+                    <span
+                        class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-white text-success fs-5 shadow-sm border"
+                        style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">3</span>
+                    <i class="fas fa-list-ol fa-3x mb-4 mt-2"></i>
+                    <h4 class="fw-bold">Get Recommendations</h4>
+                    <p class="opacity-75 mb-0">Receive ranked recommendations with detailed environmental and cost
+                        impact reports.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-5 mb-lg-0 slide-up">
+                <h2 class="fw-bold display-6 mb-4">Designed for the <br><span class="text-success">Food Industry</span>
+                </h2>
+                <p class="lead text-muted mb-4">
+                    EcoPackAI specializes in food packaging, understanding the unique
+                    requirements of different food types from dry goods to fresh produce.
+                </p>
+
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                    <span class="fw-semibold">Food-grade material compliance</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                    <span class="fw-semibold">Temperature sensitivity analysis</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                    <span class="fw-semibold">Moisture and oxygen barrier considerations</span>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                    <span class="fw-semibold">Shelf-life optimization</span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 offset-lg-1 slide-up" style="animation-delay: 0.2s;">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="p-4 rounded-4 bg-light h-100 text-center hover-lift transition">
+                            <i class="fas fa-bread-slice fa-2x text-warning mb-3"></i>
+                            <h5 class="fw-bold">Bakery</h5>
+                            <p class="small text-muted mb-0">Bread, pastries, cakes</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-4 rounded-4 bg-light h-100 text-center hover-lift transition">
+                            <i class="fas fa-apple-alt fa-2x text-success mb-3"></i>
+                            <h5 class="fw-bold">Fresh Produce</h5>
+                            <p class="small text-muted mb-0">Fruits, vegetables, herbs</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-4 rounded-4 bg-light h-100 text-center hover-lift transition">
+                            <i class="fas fa-snowflake fa-2x text-info mb-3"></i>
+                            <h5 class="fw-bold">Frozen Food</h5>
+                            <p class="small text-muted mb-0">Ice cream, frozen meals</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-4 rounded-4 bg-light h-100 text-center hover-lift transition">
+                            <i class="fas fa-wine-bottle fa-2x text-danger mb-3"></i>
+                            <h5 class="fw-bold">Liquids</h5>
+                            <p class="small text-muted mb-0">Juices, sauces, oils</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5 bg-light position-relative overflow-hidden">
+    <div class="container py-5 text-center position-relative z-1">
+        <h2 class="fw-bold display-6 mb-3">Ready to Go Green?</h2>
+        <p class="lead text-muted mb-5">Join hundreds of food businesses using EcoPackAI to make sustainable choices.
+        </p>
+
+        {% if not current_user.is_authenticated %}
+        <a href="/signup" class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow-lg hover-scale">
+            <span class="fs-5 fw-bold">Start Your Journey</span>
+            <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+        {% else %}
+        <a href="/product-input" class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow-lg hover-scale">
+            <span class="fs-5 fw-bold">Analyze a Product</span>
+            <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,301 @@
+product_id,product_name,category,weight_kg,fragility_level,temperature_sensitive
+1,Chocolate Bar,Confectionery,0.1,2,Yes
+2,Milk Bottle (1L),Dairy,1,6,Yes
+3,Egg Carton (12),Dairy,0.8,10,No
+4,Potato Chips Bag,Snacks,0.15,3,No
+5,Glass Ketchup Bottle,Condiments,0.9,9,No
+6,Bread Loaf,Bakery,0.45,3,Yes
+7,Frozen Peas (500g),Frozen Food,0.5,1,Yes
+8,Biscuits Pack,Snacks,0.2,2,No
+9,Honey Glass Jar,Condiments,0.6,8,No
+10,Yogurt Cup (150g),Dairy,0.25,4,Yes
+11,Noodles Packet,Staples,0.3,1,No
+12,Sauce Pouch,Condiments,0.5,2,Yes
+13,Fruit Juice Carton (1L),Beverages,1,4,Yes
+14,Ice Cream Tub (500g),Frozen Food,0.7,3,Yes
+15,Pickle Glass Jar,Condiments,0.8,9,No
+16,Cheese Block (250g),Dairy,0.25,3,Yes
+17,Jelly Cup,Confectionery,0.1,3,Yes
+18,Cooking Oil Bottle (1L),Pantry,1,5,No
+19,Chilli Powder Packet,Spices,0.2,1,No
+20,Rice Bag (5kg),Staples,5,1,No
+21,Dry Fruits Box,Snacks,0.5,5,No
+22,Tomato Puree Pouch,Condiments,0.4,2,Yes
+23,Tea Powder Box,Pantry,0.25,1,No
+24,Snack Pellets Pack,Snacks,0.3,2,No
+25,Soft Drink Bottle (500ml),Beverages,0.5,5,No
+26,Frozen Chicken (1kg),Frozen Food,1,6,Yes
+27,Fresh Salmon Fillet (400g),Seafood,0.4,8,Yes
+28,Fresh Apples Pack (1kg),Produce,1,3,No
+29,Fresh Bananas (1kg),Produce,1,2,No
+30,Leafy Salad Pack (200g),Produce,0.2,5,Yes
+31,Tomatoes (1kg),Produce,1,4,No
+32,Strawberries Pack (250g),Produce,0.25,9,Yes
+33,Bottle of Wine (750ml),Beverages,0.75,8,No
+34,Olive Oil Bottle (500ml),Pantry,0.5,4,No
+35,Shelf-Stable Milk (1L),Dairy,1,2,No
+36,Glass Marmalade Jar,Condiments,0.4,8,No
+37,Butter Block (200g),Dairy,0.2,6,Yes
+38,Tofu Pack (300g),Protein,0.3,5,Yes
+39,Frozen Pizza (400g),Frozen Food,0.4,2,Yes
+40,Cheese Slices Pack,Food,0.2,4,Yes
+41,Peanut Butter Jar (500g),Pantry,0.5,3,No
+42,Fresh Paneer (250g),Dairy,0.25,7,Yes
+43,Glass Sauce Jar (spicy),Condiments,0.55,7,No
+44,Deli Cold Cuts (200g),Deli,0.2,6,Yes
+45,Instant Coffee Jar,Pantry,0.2,1,No
+46,Granola Bar Pack,Snacks,0.05,1,No
+47,Protein Powder (1kg),Pantry,1,2,No
+48,Frozen Vegetables Mix (1kg),Frozen Food,1,2,Yes
+49,Glass Olive Jar,Condiments,0.7,8,No
+50,Sushi Pack (fresh),Prepared Food,0.3,9,Yes
+51,Ready Meal (Microwaveable),Prepared Food,0.45,2,Yes
+52,Sliced Bread Pack,Bakery,0.4,3,Yes
+53,Energy Drink Can (250ml),Beverages,0.25,2,No
+54,Canned Tuna (200g),Canned Food,0.2,1,No
+55,Glass Milk Bottle (500ml),Dairy,0.5,6,Yes
+56,Frozen Shrimp (500g),Seafood,0.5,7,Yes
+57,Spice Sachet (small),Spices,0.02,1,No
+58,Fresh Grapes Pack (500g),Produce,0.5,5,Yes
+59,Glass Pickle Jar Large,Condiments,1.2,9,No
+60,Frozen Ice Pops (pack),Frozen Food,0.3,2,Yes
+61,Packaged Salami (200g),Deli,0.25,6,No
+62,Bulk Sugar Bag (2kg),Pantry,2,1,No
+63,Flour Packet (1kg),Pantry,1,1,No
+64,Butter Cookies Tin,Confectionery,0.5,6,No
+65,Fresh Oysters Pack (500g),Seafood,0.5,10,Yes
+66,Fresh Milk Pouch (500ml),Dairy,0.5,5,Yes
+67,Glass Sauce Bottle Small,Condiments,0.3,6,No
+68,Yogurt Drink Bottle (250ml),Dairy,0.25,5,Yes
+69,Pasteurized Cheese Wheel (2kg),Dairy,2,4,Yes
+70,Glass Mustard Jar,Condiments,0.35,6,No
+71,Prepared Salad Bowl,Prepared Food,0.35,6,Yes
+72,Marinated Vegetables Jar,Condiments,0.8,7,No
+73,Fresh Beef Steak (300g),Meat,0.3,8,Yes
+74,Packaged Sausages (1kg),Meat,1,6,Yes
+75,Glass Syrup Bottle,Condiments,0.75,6,No
+76,Fresh Broccoli (500g),Produce,0.5,3,Yes
+77,Organic Yogurt Tub (500g),Dairy,0.5,5,Yes
+78,Glass Lemon Curd Jar,Condiments,0.4,7,No
+79,Packaged Spaghetti (500g),Pantry,0.5,1,No
+80,Protein Bar,Snacks,0.06,1,No
+81,Fresh Mango (single),Produce,0.3,2,Yes
+82,Fresh Avocado (single),Produce,0.25,5,Yes
+83,Glass Juice Bottle (250ml),Beverages,0.25,3,Yes
+84,Herb Box (basil),Produce,0.05,6,Yes
+85,Glass Baby Food Jar,Infant Food,0.12,9,Yes
+86,Packaged Cheese Spread,Food,0.2,3,Yes
+87,Frozen Fish Fillet (250g),Seafood,0.25,6,Yes
+88,Bulk Lentils Bag (2kg),Pantry,2,1,No
+89,Glass Vinegar Bottle,Condiments,0.5,2,No
+90,Fresh Pears Pack (1kg),Produce,1,3,No
+91,Glass Sauce Jar (bbq),Condiments,0.6,7,No
+92,Ready-to-eat Rice Bowl,Prepared Food,0.4,2,Yes
+93,Frozen Dumplings (600g),Frozen Food,0.6,2,Yes
+94,Glass Sweets Jar,Confectionery,0.9,7,No
+95,Glass Oil Jar (small),Pantry,0.35,4,No
+96,Cold Brew Coffee Bottle (330ml),Beverages,0.33,5,Yes
+97,Fresh Prawns (1kg),Seafood,1,9,Yes
+98,Packaged Paneer Cubes,Dairy,0.4,5,Yes
+99,Glass Fermented Sauce,Condiments,0.5,8,No
+100,Cereal Box (500g),Pantry,0.5,1,No
+101,Frozen Berries Mix (300g),Frozen Food,0.3,4,Yes
+102,Glass Marmite Jar,Condiments,0.22,4,No
+103,Fresh Lemons (1kg),Produce,1,2,No
+104,Glass Hot Sauce Bottle,Condiments,0.12,6,No
+105,Prepared Sandwich (pack),Prepared Food,0.3,6,Yes
+106,Bulk Coffee Beans (1kg),Pantry,1,1,No
+107,Glass Pickled Eggs Jar,Condiments,1.1,9,No
+108,Soft Cheese (200g),Dairy,0.2,5,Yes
+109,Fresh Corn (per ear),Produce,0.3,2,Yes
+110,Glass Dessert Jar,Prepared Food,0.35,7,No
+111,Frozen Fish Sticks (400g),Frozen Food,0.4,2,Yes
+112,Packaged Ramen Bowl,Prepared Food,0.2,1,No
+113,Organic Fresh Milk (2L),Dairy,2,6,Yes
+114,Glass Coffee Syrup,Condiments,0.6,3,No
+115,Fresh Grapefruit (single),Produce,0.4,2,No
+116,Glass Canning Jar (1L),Pantry,1,10,No
+117,Frozen Berry Smoothie (pack),Frozen Food,0.45,3,Yes
+118,Glass Infused Oil Bottle,Pantry,0.4,4,No
+119,Fresh Zucchini (1kg),Produce,1,3,Yes
+120,Packaged Muesli (400g),Pantry,0.4,1,No
+121,Glass Dessert Sauce,Condiments,0.3,6,No
+122,Fresh Oats Bag (1kg),Pantry,1,1,No
+123,Glass Fermented Drink,Beverages,0.5,7,Yes
+124,Packaged Sweets Box,Confectionery,0.6,4,No
+125,Fresh Duck Eggs (6),Dairy,0.9,10,Yes
+126,Glass Salsa Jar,Condiments,0.45,8,No
+127,Fresh Peaches Pack (1kg),Produce,1,6,Yes
+128,Glass Cinnamon Syrup,Condiments,0.3,4,No
+129,Packaged Fruit Cup,Prepared Food,0.2,3,Yes
+130,Fresh Herbs Bunch (cilantro),Produce,0.05,6,Yes
+131,Glass Marmalade Small,Condiments,0.2,5,No
+132,Fresh Carrots (1kg),Produce,1,2,No
+133,Glass Baby Food Tiny Jar,Infant Food,0.08,9,Yes
+134,Frozen Sausage Roll (pack),Frozen Food,0.5,3,Yes
+135,Packaged Protein Cookies,Snacks,0.25,1,No
+136,Glass Infused Vinegar,Condiments,0.3,3,No
+137,Fresh Spinach Bag (200g),Produce,0.2,6,Yes
+138,Packaged Fruit Leather,Snacks,0.05,2,No
+139,Glass Premium Honey Jar,Condiments,0.7,8,No
+140,Fresh Goat Cheese (small),Dairy,0.18,5,Yes
+141,Packaged Instant Oatmeal,Pantry,0.35,1,No
+142,Glass Pickle Jar Medium,Condiments,0.65,8,No
+143,Fresh Scallops (200g),Seafood,0.2,9,Yes
+144,Glass Beverage Bottle (sparkling),Beverages,0.75,7,No
+145,Packaged Curry Paste,Condiments,0.3,2,No
+146,Fresh Cucumber (single),Produce,0.25,2,Yes
+147,Glass Lemonade Bottle,Beverages,0.5,4,Yes
+148,Packaged Lentil Soup,Prepared Food,0.4,2,No
+149,Fresh Beetroots (1kg),Produce,1,2,No
+150,Glass Syrup Tall,Condiments,0.85,7,No
+151,Sourdough Loaf,Bakery,0.6,3,Yes
+152,Packaged Dried Mango,Snacks,0.15,1,No
+153,Glass Cocktail Mixer,Beverages,0.45,6,No
+154,Fresh Lamb Cutlet (400g),Meat,0.4,8,Yes
+155,Packaged Cornflakes (1kg),Pantry,1,1,No
+156,Bulk Garam Masala (500g),Spices,0.5,1,No
+157,Fresh Lychees Pack (500g),Produce,0.5,7,Yes
+158,Glass Fruit Preserve,Condiments,0.55,6,No
+159,Packaged Sea Salt (1kg),Pantry,1,1,No
+160,Fresh Turkey Breast (1kg),Meat,1,9,Yes
+161,Glass Nutritional Syrup,Pantry,0.3,4,No
+162,Packaged Popcorn,Snacks,0.2,1,No
+163,Fresh Apricots (1kg),Produce,1,6,Yes
+164,Glass Jam Jar,Condiments,0.35,6,No
+165,Packaged Protein Shakes (bottle),Beverages,0.4,5,Yes
+166,Fresh Radish Bunch,Produce,0.2,2,Yes
+167,Glass Tonic Bottle,Beverages,0.35,2,No
+168,Packaged Mixed Nuts (500g),Snacks,0.5,2,No
+169,Fresh Turmeric Root (200g),Produce,0.2,1,No
+170,Glass Infused Honey,Condiments,0.45,6,No
+171,Fresh Gooseberries Pack (250g),Produce,0.25,8,Yes
+172,Glass Coffee Creamer,Pantry,0.4,4,Yes
+173,Packaged Ready Rice (microwave),Prepared Food,0.25,1,No
+174,Fresh Kiwi Pack (500g),Produce,0.5,5,Yes
+175,Packaged Instant Noodles Bowl,Prepared Food,0.35,1,No
+176,Fresh Whitebait (300g),Seafood,0.3,9,Yes
+177,Glass Sauce Jar Small,Condiments,0.18,5,No
+178,Packaged Dates (250g),Snacks,0.25,1,No
+179,Fresh Oranges (1kg),Produce,1,2,No
+180,Glass Horseradish Jar,Condiments,0.35,6,No
+181,Packaged Soya Chunks (500g),Protein,0.5,1,No
+182,Fresh Shallots (250g),Produce,0.25,1,No
+183,Glass Relish Jar,Condiments,0.4,6,No
+184,Packaged Millet (1kg),Pantry,1,1,No
+185,Fresh Rosemary Pot,Produce,0.15,7,Yes
+186,Glass Espresso Syrup,Condiments,0.3,3,No
+187,Packaged Fruit Yogurt (multi),Dairy,0.6,5,Yes
+188,Fresh Grapenuts Box,Pantry,0.45,1,No
+189,Glass Chutney Jar,Condiments,0.4,6,No
+190,Packaged Fruit Tea,Pantry,0.1,1,No
+191,Fresh Mango Pulp (1kg),Produce,1,7,Yes
+192,Glass Pesto Jar,Condiments,0.25,5,No
+193,Packaged Plant Milk (1L),Beverages,1,3,Yes
+194,Fresh Clams Pack (500g),Seafood,0.5,9,Yes
+195,Glass Flavored Syrup,Condiments,0.3,3,No
+196,Packaged Vegetable Chips,Snacks,0.2,1,No
+197,Fresh Chestnuts Pack (500g),Produce,0.5,2,No
+198,Glass Salad Dressing,Condiments,0.3,5,No
+199,Packaged Dried Chillies,Spices,0.1,1,No
+200,Fresh Artichokes (2),Produce,0.4,4,Yes
+201,Glass Caramel Sauce,Condiments,0.5,6,No
+202,Packaged Sourdough Starter Kit,Pantry,0.2,4,Yes
+203,Fresh Blueberries (125g),Produce,0.125,9,Yes
+204,Glass Apple Sauce Jar,Condiments,0.45,4,No
+205,Packaged Gluten-Free Bread,Bakery,0.45,3,Yes
+206,Fresh Mango Slices (200g),Produce,0.2,6,Yes
+207,Glass Vegan Mayo Jar,Condiments,0.4,5,No
+208,Packaged Chia Seeds (200g),Pantry,0.2,1,No
+209,Fresh Red Cabbage (1kg),Produce,1,2,No
+210,Glass Fruit Compote,Condiments,0.5,6,No
+211,Packaged Pancake Mix,Pantry,0.75,1,No
+212,Fresh Lamb Leg (2kg),Meat,2,8,Yes
+213,Glass Espresso Shot Bottle,Beverages,0.2,3,Yes
+214,Packaged Falafel Mix,Prepared Food,0.4,2,No
+215,Fresh Sea Bass (1kg),Seafood,1,8,Yes
+216,Glass Chili Oil Bottle,Condiments,0.3,4,No
+217,Packaged Vegetable Stock Cubes,Pantry,0.2,1,No
+218,Fresh Dates (1kg),Produce,1,1,No
+219,Glass Garlic Paste Jar,Condiments,0.3,6,No
+220,Packaged Miso Paste,Condiments,0.5,2,Yes
+221,Fresh Quail Eggs (12),Dairy,0.3,9,Yes
+222,Glass Truffle Oil,Condiments,0.2,7,No
+223,Packaged Tapioca Starch (500g),Pantry,0.5,1,No
+224,Fresh Mango Lassi Bottle,Prepared Beverage,0.45,5,Yes
+225,Glass Relish Small,Condiments,0.15,6,No
+226,Packaged Saffron (1g),Spices,0.005,1,No
+227,Fresh Lamb Chops (400g),Meat,0.4,8,Yes
+228,Glass Capers Jar,Condiments,0.25,6,No
+229,Packaged Sprouted Bread,Bakery,0.45,3,Yes
+230,Fresh Oat Milk (1L),Beverages,1,4,Yes
+231,Glass Ghee Container,Pantry,0.5,3,No
+232,Packaged Curry Leaves (dried),Spices,0.02,1,No
+233,Fresh Seaweed Pack (100g),Produce,0.1,6,Yes
+234,Glass Fermented Soy,Condiments,0.55,6,No
+235,Packaged Fruit Gummies,Confectionery,0.25,2,No
+236,Fresh Venison Steak (300g),Meat,0.3,8,Yes
+237,Glass Premium Vinegar,Condiments,0.4,4,No
+238,Packaged Dried Mushrooms (100g),Pantry,0.1,2,No
+239,Fresh Sorbet Tub (500g),Frozen Food,0.5,4,Yes
+240,Glass Bottled Water (1L),Beverages,1,1,No
+241,Packaged Instant Soup,Prepared Food,0.3,1,No
+242,Fresh Mackerel (500g),Seafood,0.5,8,Yes
+243,Glass Herb Extract,Condiments,0.05,7,Yes
+244,Packaged Vegetable Kebab,Prepared Food,0.3,2,Yes
+245,Fresh Jackfruit (1kg),Produce,1,2,No
+246,Glass Almond Butter Jar,Condiments,0.6,5,No
+247,Packaged Vegan Cheese (200g),Dairy,0.2,4,Yes
+248,Fresh Goose Meat (1kg),Meat,1,8,Yes
+249,Glass Cold-Pressed Juice (250ml),Beverages,0.25,7,Yes
+250,Packaged Banana Chips,Snacks,0.2,1,No
+251,Fresh Spinach Bunch (large),Produce,0.3,6,Yes
+252,Glass Tinned Fruit Jar,Condiments,0.8,6,No
+253,Packaged Date Syrup,Condiments,0.5,2,No
+254,Fresh Confit Duck (500g),Prepared Food,0.5,8,Yes
+255,Glass Seed Oil Bottle,Pantry,0.45,3,No
+256,Packaged Brown Rice (2kg),Pantry,2,1,No
+257,Fresh Caviar Tin (small),Seafood,0.05,10,Yes
+258,Glass Apricot Jam,Condiments,0.45,5,No
+259,Packaged Pop-Tarts,Snacks,0.1,1,No
+260,Fresh Gooseberry Pack,Produce,0.25,7,Yes
+261,Glass Coconut Cream Jar,Condiments,0.45,6,Yes
+262,Packaged Quinoa (1kg),Pantry,1,1,No
+263,Fresh Sardines (1kg),Seafood,1,7,Yes
+264,Glass Cocktail Syrup,Beverages,0.3,3,No
+265,Packaged Tea Bags (100),Pantry,0.25,1,No
+266,Fresh Mango Chutney Jar,Condiments,0.5,6,No
+267,Glass Bottled Kombucha (330ml),Beverages,0.33,6,Yes
+268,Packaged Beancurd Sheets,Pantry,0.2,2,Yes
+269,Fresh Lamb Burgers (pack),Meat,0.6,7,Yes
+270,Glass Cocoa Spread Jar,Confectionery,0.6,6,No
+271,Packaged Oat Bars,Snacks,0.12,1,No
+272,Fresh Clotted Cream Tub,Dairy,0.3,6,Yes
+273,Glass Chilli Paste Jar,Condiments,0.35,6,No
+274,Packaged Vegetable Lasagna (frozen),Frozen Food,0.9,3,Yes
+275,Fresh Mussels (1kg),Seafood,1,9,Yes
+276,Glass Bean Paste Bottle,Condiments,0.45,4,No
+277,Packaged Apple Chips,Snacks,0.15,1,No
+278,Fresh Celery Bunch,Produce,0.35,3,Yes
+279,Glass Ginger Syrup,Condiments,0.3,3,No
+280,Packaged Brownie Mix,Pantry,0.45,1,No
+281,Fresh Lamb Sausage (pack),Meat,0.5,7,Yes
+282,Glass Cocktail Olive Jar,Condiments,0.4,5,No
+283,Packaged Pita Bread,Bakery,0.4,2,Yes
+284,Fresh White Truffle (small),Produce,0.02,10,Yes
+285,Glass Apricot Syrup,Condiments,0.35,3,No
+286,Packaged Corn Tortillas,Pantry,0.3,1,No
+287,Fresh Clams Half-Kilo,Seafood,0.5,9,Yes
+288,Glass Maraschino Jar,Condiments,0.35,6,No
+289,Packaged Millet Porridge Mix,Pantry,0.5,1,No
+290,Fresh Eggplant (1kg),Produce,1,2,No
+291,Glass Artisanal Sauce Jar,Condiments,0.6,6,No
+292,Packaged Dried Apricots,Snacks,0.25,1,No
+293,Fresh Romaine Lettuce,Produce,0.3,5,Yes
+294,Glass Lemon Curd Small,Condiments,0.18,6,No
+295,Packaged Instant Polenta,Pantry,0.5,1,No
+296,Fresh Smoked Salmon Pack,Seafood,0.25,8,Yes
+297,Glass Honeycomb Jar,Condiments,0.75,7,No
+298,Packaged Chili Flakes,Spices,0.05,1,No
+299,Fresh Clotted Egg (specialty),Dairy,0.12,9,Yes
+300,Glass Seasonal Preserve,Condiments,0.55,6,No

@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+
+{% block title %}Login - EcoPackAI{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Login Page Specific Styles */
+    .login-container {
+        min-height: calc(100vh - 76px);
+        /* Adjust for navbar height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Background Elements */
+    .login-bg-shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 0;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite;
+    }
+
+    .shape-1 {
+        width: 400px;
+        height: 400px;
+        background: var(--pastel-mint);
+        top: -100px;
+        right: -100px;
+        animation-delay: 0s;
+    }
+
+    .shape-2 {
+        width: 300px;
+        height: 300px;
+        background: var(--pastel-blue);
+        bottom: -50px;
+        left: -50px;
+        animation-delay: -5s;
+    }
+
+    /* Glass Card */
+    .login-card {
+        position: relative;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        max-width: 420px;
+        width: 100%;
+        animation: scaleIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .login-header {
+        text-align: center;
+        padding: 3rem 2rem 1rem;
+    }
+
+    .brand-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 1.75rem;
+        box-shadow: 0 10px 20px rgba(25, 135, 84, 0.2);
+        transform: rotate(-5deg);
+        transition: transform 0.3s ease;
+    }
+
+    .login-card:hover .brand-icon {
+        transform: rotate(0deg) scale(1.05);
+    }
+
+    .login-body {
+        padding: 1rem 2.5rem 2.5rem;
+    }
+
+    /* Form Styles */
+    .form-floating>.form-control {
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        height: 52px;
+        padding-top: 1.625rem;
+        padding-bottom: 0.625rem;
+        font-size: 0.95rem;
+    }
+
+    .form-floating>.form-control:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.1);
+        background: white;
+    }
+
+    .form-floating>label {
+        padding-left: 0.75rem;
+        color: #8898aa;
+        font-size: 0.9rem;
+    }
+
+    .form-floating>.form-control:focus~label,
+    .form-floating>.form-control:not(:placeholder-shown)~label {
+        transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
+        color: #198754;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #adb5bd;
+        cursor: pointer;
+        z-index: 5;
+        padding: 5px;
+        transition: color 0.2s ease;
+    }
+
+    .password-toggle:hover {
+        color: #198754;
+    }
+
+    /* Custom Checkbox */
+    .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        margin-top: 0.15em;
+        border-radius: 4px;
+        border: 1px solid #adb5bd;
+        cursor: pointer;
+    }
+
+    .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+
+    /* Gradient Button */
+    .btn-gradient {
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+    }
+
+    .btn-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(25, 135, 84, 0.4);
+        background: linear-gradient(135deg, #146c43 0%, #198754 100%);
+    }
+
+    .btn-gradient:active {
+        transform: translateY(0);
+    }
+
+    /* Social Buttons */
+    .social-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .social-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 46px;
+        border-radius: 12px;
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        color: #525f7f;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .social-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        color: #198754;
+    }
+
+    .social-btn i {
+        font-size: 1.1rem;
+    }
+
+    /* Footer Link */
+    .auth-footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .auth-link {
+        color: #198754;
+        font-weight: 600;
+        text-decoration: none;
+        position: relative;
+        transition: color 0.2s ease;
+    }
+
+    .auth-link:hover {
+        color: #146c43;
+    }
+
+    .auth-link::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: #198754;
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease-out;
+    }
+
+    .auth-link:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-20px) rotate(5deg);
+        }
+
+        100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+    }
+
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <!-- Ambient Background Shapes -->
+    <div class="login-bg-shape shape-1"></div>
+    <div class="login-bg-shape shape-2"></div>
+
+    <div class="login-card">
+        <div class="login-header">
+            <div class="brand-icon">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h3 class="fw-bold mb-1">Welcome Back</h3>
+            <p class="text-muted small mb-0">Sign in to your EcoPackAI dashboard</p>
+        </div>
+
+        <div class="login-body">
+            <form id="loginForm">
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" placeholder="Username" required
+                            autocomplete="username">
+                        <label for="username">
+                            <i class="fas fa-user me-2 opacity-50"></i>Username or Email
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-floating position-relative">
+                        <input type="password" class="form-control" id="password" placeholder="Password" required
+                            autocomplete="current-password">
+                        <label for="password">
+                            <i class="fas fa-lock me-2 opacity-50"></i>Password
+                        </label>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label text-muted small" for="rememberMe">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="small text-muted text-decoration-none hover-highlight">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-gradient w-100">
+                    <span id="loginText">Sign In</span>
+                    <span id="loginSpinner" class="spinner-border spinner-border-sm d-none ms-2"></span>
+                </button>
+
+                <div class="auth-footer">
+                    <p class="mb-0 small text-muted">
+                        Don't have an account?
+                        <a href="/signup" class="auth-link">Create Account</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loginForm = document.getElementById('loginForm');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = loginForm.querySelector('button[type="submit"]');
+        const loginText = document.getElementById('loginText');
+        const loginSpinner = document.getElementById('loginSpinner');
+
+        // Toggle password visibility
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Form submission
+        loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showToast('Please fill in all fields', 'warning');
+                return;
+            }
+
+            // UI Loading State
+            loginBtn.disabled = true;
+            loginText.textContent = 'Signing In...';
+            loginSpinner.classList.remove('d-none');
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+
+                // Success
+                if (data.access_token) {
+                    localStorage.setItem('ecopackai_token', data.access_token);
+                    if (data.user) {
+                        localStorage.setItem('ecopackai_user', JSON.stringify(data.user));
+                    }
+
+                    showToast('Welcome back! Redirecting...', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 800);
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast(error.message || 'Login failed', 'danger');
+
+                // Reset UI
+                loginBtn.disabled = false;
+                loginText.textContent = 'Sign In';
+                loginSpinner.classList.add('d-none');
+            }
+        });
+
+        // Custom Toast Notification (replacing standard alert)
+        function showToast(message, type) {
+            const toastContainer = document.querySelector('.alert-container') || createToastContainer();
+
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type} border-0 show`;
+            toast.style.position = 'fixed';
+            toast.style.top = '20px';
+            toast.style.right = '20px';
+            toast.style.zIndex = '1050';
+            toast.style.minWidth = '300px';
+            toast.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+            toast.style.borderRadius = '12px';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            let icon = type === 'success' ? 'check-circle' : (type === 'danger' ? 'exclamation-circle' : 'info-circle');
+
+            toast.innerHTML = `
+            <div class="d-flex p-3">
+                <div class="me-3"><i class="fas fa-${icon} fa-lg"></i></div>
+                <div class="toast-body flex-grow-1" style="font-size: 0.95rem;">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+
+            document.body.appendChild(toast);
+
+            // Build in animation
+            toast.animate([
+                { transform: 'translateX(100%)', opacity: 0 },
+                { transform: 'translateX(0)', opacity: 1 }
+            ], {
+                duration: 300,
+                easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+            });
+
+            setTimeout(() => {
+                toast.animate([
+                    { opacity: 1 },
+                    { opacity: 0, transform: 'translateY(-20px)' }
+                ], {
+                    duration: 300,
+                    fill: 'forwards'
+                }).onfinish = () => toast.remove();
+            }, 4000);
+        }
+
+        function createToastContainer() {
+            const div = document.createElement('div');
+            div.className = 'alert-container';
+            document.body.appendChild(div);
+            return div;
+        }
+    });
+</script>
+{% endblock %}

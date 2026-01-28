@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EcoPackAI{% endblock %}</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --navbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F9FAFB;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: white;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand {
+            height: var(--navbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 1.5rem 0.75rem;
+        }
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #4B5563;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link-custom i {
+            width: 24px;
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .nav-link-custom:hover,
+        .nav-link-custom.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .nav-link-custom.active {
+            font-weight: 600;
+        }
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-navbar {
+            height: var(--navbar-height);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .content-body {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+
+        /* Layout overrides for public pages */
+        .public-page .sidebar {
+            display: none;
+        }
+
+        .public-page .main-wrapper {
+            margin-left: 0;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+{% set is_public = not current_user.is_authenticated or request.path in ['/', '/login', '/signup'] %}
+
+<body class="{{ 'public-page' if is_public else 'dashboard-page' }}">
+
+    {% if not is_public %}
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <a href="/" class="text-decoration-none d-flex align-items-center">
+                <i class="fas fa-leaf text-success me-2"></i>
+                <span class="h4 fw-bold mb-0 text-dark" style="font-family: 'Outfit', sans-serif;">EcoPackAI</span>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-link-custom {{ 'active' if request.path == '/dashboard' }}">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="/product-input" class="nav-link-custom {{ 'active' if request.path == '/product-input' }}">
+                <i class="fas fa-plus-circle"></i> New Analysis
+            </a>
+            <a href="/recommendations" class="nav-link-custom {{ 'active' if request.path == '/recommendations' }}">
+                <i class="fas fa-lightbulb"></i> Recommendations
+            </a>
+            <a href="/analytics" class="nav-link-custom {{ 'active' if request.path == '/analytics' }}">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a href="/report" class="nav-link-custom {{ 'active' if request.path == '/report' }}">
+                <i class="fas fa-file-alt"></i> Reports
+            </a>
+            <hr class="my-4 opacity-10">
+            <a href="javascript:logout()" class="nav-link-custom text-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+        <div class="p-3 mt-auto">
+            <div class="bg-light p-3 rounded-4">
+                <p class="small text-muted mb-0">User</p>
+                <p class="small fw-bold mb-0 text-truncate">{{ current_user.username }}</p>
+            </div>
+        </div>
+    </aside>
+    {% endif %}
+
+    <div class="main-wrapper">
+        <nav class="top-navbar">
+            <div class="d-flex align-items-center">
+                {% if not is_public %}
+                <button class="btn btn-light d-lg-none me-3"
+                    onclick="document.querySelector('.sidebar').classList.toggle('show')">
+                    <i class="fas fa-bars"></i>
+                </button>
+                {% else %}
+                <a href="/" class="text-decoration-none d-flex align-items-center me-4">
+                    <i class="fas fa-leaf text-success me-2"></i>
+                    <span class="h5 fw-bold mb-0 text-dark">EcoPackAI</span>
+                </a>
+                {% endif %}
+                <h5 class="mb-0 fw-bold text-dark d-none d-md-block">{% block page_title %}{% endblock %}</h5>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                {% if current_user.is_authenticated %}
+                <div class="dropdown">
+                    <div class="d-flex align-items-center gap-2 cursor-pointer" data-bs-toggle="dropdown">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                            style="width: 35px; height: 35px;">
+                            {{ current_user.username[0].upper() }}
+                        </div>
+                        <span class="fw-medium d-none d-sm-block">{{ current_user.username }}</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2 rounded-3">
+                        <li><a class="dropdown-item rounded-2" href="/dashboard"><i class="fas fa-user-circle me-2"></i>
+                                Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item rounded-2 text-danger" href="javascript:logout()"><i
+                                    class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="/login" class="btn btn-link text-dark text-decoration-none">Login</a>
+                <a href="/signup" class="btn btn-success rounded-pill px-4">Sign Up</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <main class="content-body">
+            {% block content %}{% endblock %}
+        </main>
+
+        {% if is_public %}
+        <footer class="bg-dark text-white py-5 mt-auto">
+            <div class="container text-center">
+                <p class="mb-0 opacity-50">&copy; 2024 EcoPackAI. Driving sustainable packaging forward.</p>
+            </div>
+        </footer>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+    <script>
+        // Global logout handler
+        window.logout = function () {
+            if (typeof AuthManager !== 'undefined') {
+                AuthManager.clear();
+            } else {
+                localStorage.removeItem('ecopackai_token');
+                localStorage.removeItem('ecopackai_user');
+            }
+            window.location.href = '/logout';
+        };
+    </script>
+</body>
+
+</html>

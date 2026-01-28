@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Sustainability Report - EcoPackAI{% endblock %}
+{% block page_title %}Sustainability Reports{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-card {
+        border-radius: 20px;
+        background: white;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(25, 135, 84, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .export-option {
+        padding: 2rem;
+        border-radius: 15px;
+        border: 2px solid #f8f9fa;
+        transition: all 0.3s ease;
+        text-align: center;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .export-option:hover {
+        border-color: #198754;
+        background: rgba(25, 135, 84, 0.02);
+        transform: translateY(-5px);
+    }
+
+    .export-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .pdf-icon {
+        color: #dc3545;
+    }
+
+    .excel-icon {
+        color: #198754;
+    }
+
+    .csv-icon {
+        color: #0d6efd;
+    }
+
+    .report-preview {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.85rem;
+        color: #495057;
+        margin-top: 1.5rem;
+        border: 1px dashed #dee2e6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="report-card text-center mb-5">
+                <h1 class="fw-bold mb-3">Sustainability Reports</h1>
+                <p class="text-muted lead">Export your packaging analysis data in professional formats for stakeholders
+                    and compliance.</p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <!-- PDF Option -->
+                <div class="col-md-4">
+                    <div class="export-option" onclick="EcoPackAI.AnalyticsService.exportReport('pdf')">
+                        <div class="export-icon pdf-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h4 class="fw-bold">Executive PDF</h4>
+                        <p class="text-muted small">Professional summary with charts and executive insights. Best for
+                            presentations.</p>
+                        <button class="btn btn-danger w-100 mt-3">Download PDF</button>
+                    </div>
+                </div>
+
+                <!-- Excel Option -->
+                <div class="col-md-4">
+                    <div class="export-option" onclick="EcoPackAI.AnalyticsService.exportReport('excel')">
+                        <div class="export-icon excel-icon">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <h4 class="fw-bold">Data Excel</h4>
+                        <p class="text-muted small">Complete dataset with multiple sheets and summary tables. Best for
+                            analysis.</p>
+                        <button class="btn btn-success w-100 mt-3">Download Excel</button>
+                    </div>
+                </div>
+
+                <!-- CSV Option -->
+                <div class="col-md-4">
+                    <div class="export-option" onclick="EcoPackAI.AnalyticsService.exportReport('csv')">
+                        <div class="export-icon csv-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h4 class="fw-bold">Raw CSV</h4>
+                        <p class="text-muted small">Plain text comma-separated values. Best for importing into other
+                            tools.</p>
+                        <button class="btn btn-primary w-100 mt-3">Download CSV</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <h3 class="fw-bold mb-4">Report Contents</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i> Total Environmental Impact
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i> CO2 Reduction Summaries
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i> Cost Savings Analysis
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i> Material Usage Trends
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i> Product Breakdown
+                            </li>
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-check-circle text-success me-2"></i> Compliance Readiness
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="report-preview mt-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>ECO_PACK_AI_REPORT_V1.0</span>
+                        <span>CONFIDENTIAL</span>
+                    </div>
+                    ------------------------------------------------------------<br>
+                    SUMMARY OF IMPACT:<br>
+                    - TOTAL CO2 SAVED: 124.5 kg<br>
+                    - TOTAL COST SAVINGS: $1,250.00<br>
+                    - TOP MATERIAL: Recycled Corrugated Cardboard<br>
+                    ------------------------------------------------------------
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

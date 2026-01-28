@@ -1,0 +1,694 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - EcoPackAI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .signup-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+
+    .signup-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .signup-header {
+        background: linear-gradient(135deg, #198754 0%, #0f5132 100%);
+        color: white;
+        padding: 2.5rem;
+        text-align: center;
+    }
+
+    .signup-body {
+        padding: 2.5rem;
+    }
+
+    .password-strength {
+        height: 4px;
+        background: #dee2e6;
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+    }
+
+    .password-strength-bar {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+        border-radius: 2px;
+    }
+
+    .password-strength-text {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .step-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .step-indicator::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #dee2e6;
+        z-index: 1;
+    }
+
+    .step {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        flex: 1;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        background: #dee2e6;
+        color: #6c757d;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin: 0 auto 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .step.active .step-number {
+        background: #198754;
+        color: white;
+    }
+
+    .step-label {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .step.active .step-label {
+        color: #198754;
+        font-weight: 500;
+    }
+
+    .step-content {
+        display: none;
+    }
+
+    .step-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .plan-card {
+        border: 2px solid #dee2e6;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .plan-card:hover {
+        border-color: #198754;
+        transform: translateY(-2px);
+    }
+
+    .plan-card.selected {
+        border-color: #198754;
+        background: rgba(25, 135, 84, 0.05);
+    }
+
+    .plan-card h5 {
+        margin-bottom: 1rem;
+    }
+
+    .plan-card .price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #198754;
+    }
+
+    .plan-card .period {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .plan-features li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .plan-features li:last-child {
+        border-bottom: none;
+    }
+
+    .plan-features li i {
+        color: #198754;
+        margin-right: 0.5rem;
+    }
+
+    @media (max-width: 576px) {
+        .signup-card {
+            margin: 1rem;
+        }
+
+        .signup-header,
+        .signup-body {
+            padding: 1.5rem;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <div class="signup-card">
+        <div class="signup-header">
+            <h2 class="mb-2">Create Account</h2>
+            <p class="mb-0 opacity-75">Join EcoPackAI for sustainable packaging solutions</p>
+        </div>
+
+        <div class="signup-body">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Account</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Profile</div>
+                </div>
+            </div>
+
+            <form id="signupForm">
+                <!-- Step 1: Account Information -->
+                <div class="step-content active" id="step1">
+                    <h5 class="mb-4">Account Information</h5>
+
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="username" placeholder="Username" required>
+                            <label for="username">
+                                <i class="fas fa-user me-2"></i>Username
+                            </label>
+                        </div>
+                        <div class="form-text">3-20 characters, letters and numbers only</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+                            <label for="email">
+                                <i class="fas fa-envelope me-2"></i>Email Address
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-floating position-relative">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                            <label for="password">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <div class="password-strength-text" id="passwordStrengthText"></div>
+                        <div class="form-text">Minimum 8 characters with letters and numbers</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-floating position-relative">
+                            <input type="password" class="form-control" id="confirmPassword"
+                                placeholder="Confirm Password" required>
+                            <label for="confirmPassword">
+                                <i class="fas fa-lock me-2"></i>Confirm Password
+                            </label>
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-text" id="passwordMatchText"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="btn btn-success" onclick="nextStep()">
+                            Next <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Profile Information -->
+                <div class="step-content" id="step2">
+                    <h5 class="mb-4">Profile Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                                <label for="firstName">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                                <label for="lastName">Last Name</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="company" placeholder="Company Name">
+                            <label for="company">
+                                <i class="fas fa-building me-2"></i>Company Name (Optional)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-floating">
+                            <select class="form-select" id="industry">
+                                <option value="">Select Industry</option>
+                                <option value="food_manufacturing">Food Manufacturing</option>
+                                <option value="food_retail">Food Retail</option>
+                                <option value="restaurant">Restaurant/Cafe</option>
+                                <option value="ecommerce">E-commerce</option>
+                                <option value="logistics">Logistics & Distribution</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <label for="industry">
+                                <i class="fas fa-industry me-2"></i>Industry
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-secondary" onclick="prevStep()">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-success" id="signupBtn">
+                            <span id="signupText">Create Account</span>
+                            <span id="signupSpinner" class="spinner-border spinner-border-sm d-none ms-2"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            <p class="mb-0">
+                Already have an account?
+                <a href="/login" class="text-success fw-bold text-decoration-none">
+                    Sign in here
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+    let selectedPlan = 'free';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize password strength checker
+        document.getElementById('password').addEventListener('input', checkPasswordStrength);
+        document.getElementById('confirmPassword').addEventListener('input', checkPasswordMatch);
+
+        // Select free plan by default
+        selectPlan('free');
+    });
+
+    function nextStep() {
+        // Validate current step
+        if (!validateStep(currentStep)) {
+            return;
+        }
+
+        // Hide current step
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+
+        // Show next step
+        currentStep++;
+        document.getElementById(`step${currentStep}`).classList.add('active');
+        document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+
+        // Update button text on last step
+        if (currentStep === 3) {
+            document.getElementById('signupText').textContent = `Sign Up - ${selectedPlan === 'free' ? 'Free' : 'Pro'}`;
+        }
+    }
+
+    function prevStep() {
+        // Hide current step
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+
+        // Show previous step
+        currentStep--;
+        document.getElementById(`step${currentStep}`).classList.add('active');
+        document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+    }
+
+    function validateStep(step) {
+        switch (step) {
+            case 1:
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // Username validation
+                if (!username) {
+                    showAlert('Please enter a username', 'danger');
+                    return false;
+                }
+                if (username.length < 3 || username.length > 20) {
+                    showAlert('Username must be 3-20 characters', 'danger');
+                    return false;
+                }
+                if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                    showAlert('Username can only contain letters, numbers, and underscores', 'danger');
+                    return false;
+                }
+
+                // Email validation
+                if (!email) {
+                    showAlert('Please enter an email address', 'danger');
+                    return false;
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showAlert('Please enter a valid email address', 'danger');
+                    return false;
+                }
+
+                // Password validation
+                if (!password) {
+                    showAlert('Please enter a password', 'danger');
+                    return false;
+                }
+                if (password.length < 8) {
+                    showAlert('Password must be at least 8 characters', 'danger');
+                    return false;
+                }
+                if (!/(?=.*[A-Za-z])(?=.*\d)/.test(password)) {
+                    showAlert('Password must contain both letters and numbers', 'danger');
+                    return false;
+                }
+
+                // Confirm password
+                if (password !== confirmPassword) {
+                    showAlert('Passwords do not match', 'danger');
+                    return false;
+                }
+
+                return true;
+
+            case 2:
+                // All fields are optional in step 2
+                return true;
+
+            default:
+                return true;
+        }
+    }
+
+    function selectPlan(plan) {
+        selectedPlan = plan;
+
+        // Update UI
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+
+        if (plan === 'free') {
+            document.getElementById('freePlan').classList.add('selected');
+            document.getElementById('signupText').textContent = 'Sign Up - Free';
+        } else {
+            document.getElementById('proPlan').classList.add('selected');
+            document.getElementById('signupText').textContent = 'Sign Up - Pro';
+        }
+    }
+
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+
+        let strength = 0;
+        let text = '';
+        let color = '#dc3545'; // red
+
+        if (password.length >= 8) strength += 25;
+        if (/[a-z]/.test(password)) strength += 25;
+        if (/[A-Z]/.test(password)) strength += 25;
+        if (/[0-9]/.test(password)) strength += 25;
+
+        strengthBar.style.width = strength + '%';
+
+        if (strength < 50) {
+            text = 'Weak';
+            color = '#dc3545';
+        } else if (strength < 75) {
+            text = 'Fair';
+            color = '#ffc107';
+        } else {
+            text = 'Strong';
+            color = '#198754';
+        }
+
+        strengthBar.style.backgroundColor = color;
+        strengthText.textContent = text;
+        strengthText.style.color = color;
+    }
+
+    function checkPasswordMatch() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const matchText = document.getElementById('passwordMatchText');
+
+        if (!confirmPassword) {
+            matchText.textContent = '';
+            return;
+        }
+
+        if (password === confirmPassword) {
+            matchText.textContent = 'Passwords match ✓';
+            matchText.style.color = '#198754';
+        } else {
+            matchText.textContent = 'Passwords do not match ✗';
+            matchText.style.color = '#dc3545';
+        }
+    }
+
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const toggle = field.nextElementSibling;
+        const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+
+        field.setAttribute('type', type);
+        toggle.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    }
+
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+
+        let strength = 0;
+        let text = '';
+        let color = '#dc3545'; // red
+
+        if (password.length >= 8) strength += 25;
+        if (/[a-z]/.test(password)) strength += 25;
+        if (/[A-Z]/.test(password)) strength += 25;
+        if (/[0-9]/.test(password)) strength += 25;
+
+        strengthBar.style.width = strength + '%';
+
+        if (strength < 50) {
+            text = 'Weak';
+            color = '#dc3545';
+        } else if (strength < 75) {
+            text = 'Fair';
+            color = '#ffc107';
+        } else {
+            text = 'Strong';
+            color = '#198754';
+        }
+
+        strengthBar.style.backgroundColor = color;
+        strengthText.textContent = text;
+        strengthText.style.color = color;
+    }
+
+    function checkPasswordMatch() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const matchText = document.getElementById('passwordMatchText');
+
+        if (!confirmPassword) {
+            matchText.textContent = '';
+            return;
+        }
+
+        if (password === confirmPassword) {
+            matchText.textContent = 'Passwords match ✓';
+            matchText.style.color = '#198754';
+        } else {
+            matchText.textContent = 'Passwords do not match ✗';
+            matchText.style.color = '#dc3545';
+        }
+    }
+
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const toggle = field.nextElementSibling;
+        const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+
+        field.setAttribute('type', type);
+        toggle.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    }
+
+    // Form submission
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        if (!validateStep(1) || !validateStep(2)) {
+            showAlert('Please fix the errors in the form', 'danger');
+            return;
+        }
+
+        if (!document.getElementById('terms').checked) {
+            showAlert('Please accept the terms and conditions', 'danger');
+            return;
+        }
+
+        const signupBtn = document.getElementById('signupBtn');
+        const signupText = document.getElementById('signupText');
+        const signupSpinner = document.getElementById('signupSpinner');
+
+        // Show loading state
+        signupBtn.disabled = true;
+        signupText.textContent = 'Creating Account...';
+        signupSpinner.classList.remove('d-none');
+
+        try {
+            // Prepare data
+            const formData = {
+                username: document.getElementById('username').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value,
+                first_name: document.getElementById('firstName').value.trim(),
+                last_name: document.getElementById('lastName').value.trim(),
+                company: document.getElementById('company').value.trim(),
+                industry: document.getElementById('industry').value,
+                industry: document.getElementById('industry').value,
+                plan: 'free'
+            };
+
+            // Make API request
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Registration failed');
+            }
+
+            // Store token and user data
+            if (data.access_token) {
+                localStorage.setItem('ecopackai_token', data.access_token);
+                if (data.user) {
+                    localStorage.setItem('ecopackai_user', JSON.stringify(data.user));
+                }
+
+                // Show success message
+                showAlert('Account created successfully! Redirecting...', 'success');
+
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1500);
+            }
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            showAlert(error.message || 'Registration failed. Please try again.', 'danger');
+
+            // Reset button
+            signupBtn.disabled = false;
+            signupText.textContent = `Sign Up - ${selectedPlan === 'free' ? 'Free' : 'Pro'}`;
+            signupSpinner.classList.add('d-none');
+        }
+    });
+
+    function showAlert(message, type) {
+        // Remove existing alerts
+        const existingAlert = document.querySelector('.alert');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        // Create alert
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+        alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+        // Insert after step content
+        const currentStepContent = document.getElementById(`step${currentStep}`);
+        currentStepContent.parentNode.insertBefore(alert, currentStepContent.nextSibling);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    }
+</script>
+{% endblock %}

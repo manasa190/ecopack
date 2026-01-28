@@ -1,0 +1,425 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EcoPackAI{% endblock %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dashboard-metrics {
+        margin-bottom: 2.5rem;
+    }
+
+    .metric-card {
+        text-align: center;
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        line-height: 1;
+        margin: 0.5rem 0;
+    }
+
+    .metric-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+
+    .metric-change {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    .metric-change.positive {
+        color: #198754;
+    }
+
+    .metric-change.negative {
+        color: #dc3545;
+    }
+
+    .quick-actions {
+        margin-bottom: 2rem;
+    }
+
+    .action-card {
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .action-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        text-decoration: none;
+    }
+
+    .action-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.75rem;
+    }
+
+    .action-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+
+    .action-description {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .recent-activity {
+        margin-bottom: 2rem;
+    }
+
+    .activity-item {
+        padding: 1rem;
+        border-left: 3px solid #198754;
+        background: rgba(25, 135, 84, 0.05);
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .activity-item:hover {
+        background: rgba(25, 135, 84, 0.1);
+        transform: translateX(3px);
+    }
+
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex-grow: 1;
+    }
+
+    .activity-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: #212529;
+    }
+
+    .activity-time {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6c757d;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #212529;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .chart-period {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .welcome-message {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .welcome-highlight {
+        color: #198754;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 1.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" id="dashboardContent">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="fw-bold mb-2">Welcome, <span id="username" class="text-success">User</span>! 👋</h1>
+                <p class="welcome-message">
+                    Here's your sustainability dashboard for
+                    <span class="welcome-highlight" id="currentDate">{{ current_date }}</span>
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="/product-input" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>New Analysis
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="dashboard-metrics">
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card">
+                    <div class="metric-icon bg-success bg-opacity-10 text-success">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="metric-value" id="totalRecs">0</div>
+                    <div class="metric-label">Total Analyses</div>
+                    <div class="metric-change positive" id="recsChange">+0% this month</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card">
+                    <div class="metric-icon bg-info bg-opacity-10 text-info">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="metric-value" id="co2Reduced">0%</div>
+                    <div class="metric-label">Avg CO₂ Reduction</div>
+                    <div class="metric-change positive" id="co2Change">+0% this month</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card">
+                    <div class="metric-icon bg-warning bg-opacity-10 text-warning">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="metric-value" id="costSaved">0%</div>
+                    <div class="metric-label">Avg Cost Savings</div>
+                    <div class="metric-change positive" id="costChange">+0% this month</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="metric-card">
+                    <div class="metric-icon bg-primary bg-opacity-10 text-primary">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="metric-value" id="ecoScore">0</div>
+                    <div class="metric-label">Eco Score</div>
+                    <div class="metric-change positive" id="scoreChange">+0 this month</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h3 class="fw-bold mb-4">Quick Actions</h3>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <a href="/product-input" class="action-card text-decoration-none">
+                    <div class="action-icon bg-success bg-opacity-10 text-success">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h5 class="action-title">New Analysis</h5>
+                    <p class="action-description">Analyze a new food product</p>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <a href="/analytics" class="action-card text-decoration-none">
+                    <div class="action-icon bg-primary bg-opacity-10 text-primary">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5 class="action-title">View Analytics</h5>
+                    <p class="action-description">Detailed insights & charts</p>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <a href="/report" class="action-card text-decoration-none">
+                    <div class="action-icon bg-warning bg-opacity-10 text-warning">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h5 class="action-title">Generate Report</h5>
+                    <p class="action-description">Export sustainability report</p>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <a href="/recommendations" class="action-card text-decoration-none">
+                    <div class="action-icon bg-info bg-opacity-10 text-info">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h5 class="action-title">View Recommendations</h5>
+                    <p class="action-description">See past analyses</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column: Charts -->
+        <div class="col-lg-8">
+            <!-- Performance Chart -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    <span>Monthly Performance</span>
+                    <span class="chart-period">Last 6 months</span>
+                </div>
+                <div id="co2Chart" style="height: 300px;">
+                    <div class="d-flex justify-content-center align-items-center h-100 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2"></div> Loading chart...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Material Usage Chart -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    <span>Top Materials Used</span>
+                    <span class="chart-period">By frequency</span>
+                </div>
+                <div id="materialChart" style="height: 300px;">
+                    <div class="d-flex justify-content-center align-items-center h-100 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2"></div> Loading chart...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Recent Activity -->
+        <div class="col-lg-4">
+            <div class="chart-container h-100">
+                <div class="chart-title">
+                    <span>Recent Activity</span>
+                    <a href="/recommendations" class="btn btn-sm btn-outline-success">View All</a>
+                </div>
+
+                <div id="recentActivity">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <p>No recent activity</p>
+                        <a href="/product-input" class="btn btn-sm btn-success">Start First Analysis</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <button class="btn btn-outline-secondary btn-sm" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt me-2"></i>Force Refresh Page
+        </button>
+        <button class="btn btn-outline-success btn-sm ms-2" onclick="EcoPackAI.DashboardManager.load()">
+            <i class="fas fa-redo me-2"></i>Reload Data
+        </button>
+    </div>
+</div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fallback: Check if Plotly is loaded
+        if (typeof Plotly === 'undefined') {
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-danger fixed-top m-3';
+            alert.innerHTML = 'Criticial Error: Charting library failed to load. Please check your internet connection.';
+            document.body.appendChild(alert);
+        }
+    });
+</script>
+{% endblock %}

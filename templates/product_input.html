@@ -1,0 +1,821 @@
+{% extends "base.html" %}
+
+{% block title %}Product Analysis - EcoPackAI{% endblock %}
+{% block page_title %}Analyze Your Product{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-input-container {
+        min-height: calc(100vh - 200px);
+        padding: 2rem 0;
+    }
+
+    .form-card {
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        background: white;
+        margin-bottom: 2rem;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #0f5132 0%, #198754 100%);
+        color: white;
+        padding: 2rem;
+    }
+
+    .form-body {
+        padding: 2rem;
+    }
+
+    .preview-card {
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        background: white;
+        padding: 2rem;
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+    }
+
+    .preview-header {
+        border-bottom: 2px solid #198754;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .preview-item {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .preview-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .preview-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .preview-value {
+        font-size: 1.1rem;
+        color: #198754;
+        font-weight: 500;
+    }
+
+    .food-type-card {
+        border: 2px solid #dee2e6;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .food-type-card:hover {
+        border-color: #198754;
+        transform: translateY(-2px);
+    }
+
+    .food-type-card.selected {
+        border-color: #198754;
+        background: rgba(25, 135, 84, 0.05);
+    }
+
+    .food-type-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #198754;
+    }
+
+    .food-type-name {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .food-type-desc {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .slider-container {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    .slider-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #198754;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+
+    .form-range {
+        width: 100%;
+        height: 10px;
+        -webkit-appearance: none;
+        background: #dee2e6;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    .form-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        background: #198754;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .form-range::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(25, 135, 84, 0.5);
+    }
+
+    .temperature-toggle {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .temp-btn {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .temp-btn:hover {
+        border-color: #198754;
+        background: rgba(25, 135, 84, 0.05);
+    }
+
+    .temp-btn.selected {
+        border-color: #198754;
+        background: #198754;
+        color: white;
+    }
+
+    .temp-btn i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        display: none;
+    }
+
+    .loading-content {
+        text-align: center;
+        max-width: 400px;
+        padding: 2rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #198754;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .form-header,
+        .form-body,
+        .preview-card {
+            padding: 1.5rem;
+        }
+
+        .food-type-card {
+            padding: 1rem;
+        }
+
+        .food-type-icon {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="product-input-container">
+    <div class="container">
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h4 class="mb-3">Analyzing Product</h4>
+                <p class="text-muted">Our AI is finding the most sustainable packaging materials...</p>
+                <div class="progress mb-3" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                </div>
+                <small class="text-muted">This may take a few seconds</small>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Main Form -->
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2 class="mb-2">Product Analysis</h2>
+                        <p class="mb-0 opacity-75">Enter details about your food product</p>
+                    </div>
+
+                    <div class="form-body">
+                        <form id="productForm">
+                            <!-- Product Name -->
+                            <div class="mb-4">
+                                <label for="productName" class="form-label fw-bold">
+                                    <i class="fas fa-tag me-2"></i>Product Name
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="productName"
+                                    placeholder="e.g., Organic Chocolate Bars" required>
+                                <div class="form-text">Enter a descriptive name for your food product</div>
+                            </div>
+
+                            <!-- Food Type Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold d-block mb-3">
+                                    <i class="fas fa-utensils me-2"></i>Food Type
+                                </label>
+                                <div class="row g-3" id="foodTypeSelection">
+                                    <div class="col-md-4">
+                                        <div class="food-type-card" data-type="dry">
+                                            <div class="food-type-icon">
+                                                <i class="fas fa-wheat-alt"></i>
+                                            </div>
+                                            <div class="food-type-name">Dry Food</div>
+                                            <div class="food-type-desc">Grains, cereals, snacks</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="food-type-card" data-type="fresh">
+                                            <div class="food-type-icon">
+                                                <i class="fas fa-apple-alt"></i>
+                                            </div>
+                                            <div class="food-type-name">Fresh Produce</div>
+                                            <div class="food-type-desc">Fruits, vegetables, herbs</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="food-type-card" data-type="frozen">
+                                            <div class="food-type-icon">
+                                                <i class="fas fa-snowflake"></i>
+                                            </div>
+                                            <div class="food-type-name">Frozen Food</div>
+                                            <div class="food-type-desc">Meat, vegetables, ready meals</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="food-type-card" data-type="liquid">
+                                            <div class="food-type-icon">
+                                                <i class="fas fa-wine-bottle"></i>
+                                            </div>
+                                            <div class="food-type-name">Liquid Food</div>
+                                            <div class="food-type-desc">Sauces, oils, beverages</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="food-type-card" data-type="ready">
+                                            <div class="food-type-icon">
+                                                <i class="fas fa-microwave"></i>
+                                            </div>
+                                            <div class="food-type-name">Ready-to-Eat</div>
+                                            <div class="food-type-desc">Prepared meals, snacks</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="food-type-card" data-type="bakery">
+                                            <div class="food-type-icon">
+                                                <i class="fas fa-bread-slice"></i>
+                                            </div>
+                                            <div class="food-type-name">Bakery Items</div>
+                                            <div class="food-type-desc">Bread, pastries, cakes</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="foodType" name="food_type" required>
+                            </div>
+
+                            <!-- Weight Slider -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold d-block mb-3">
+                                    <i class="fas fa-weight-hanging me-2"></i>Product Weight
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" class="form-range" id="productWeight" min="0.01" max="5"
+                                        step="0.01" value="0.5">
+                                    <div class="slider-value" id="weightValue">0.50 kg</div>
+                                </div>
+                                <div class="form-text">
+                                    Adjust the slider for your product weight (0.01 - 5 kg)
+                                </div>
+                            </div>
+
+                            <!-- Fragility Slider -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold d-block mb-3">
+                                    <i class="fas fa-shield-alt me-2"></i>Fragility Level
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" class="form-range" id="fragilityLevel" min="1" max="10" step="1"
+                                        value="5">
+                                    <div class="slider-value" id="fragilityValue">5 / 10</div>
+                                </div>
+                                <div class="form-text">
+                                    1 = Very sturdy (canned goods), 10 = Very fragile (glass containers)
+                                </div>
+                            </div>
+
+                            <!-- Temperature Sensitivity -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold d-block mb-3">
+                                    <i class="fas fa-thermometer-half me-2"></i>Temperature Sensitive?
+                                </label>
+                                <div class="temperature-toggle">
+                                    <div class="temp-btn" data-temp="false">
+                                        <i class="fas fa-times-circle"></i>
+                                        <div>No</div>
+                                        <small class="opacity-75">Room temperature safe</small>
+                                    </div>
+                                    <div class="temp-btn" data-temp="true">
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>Yes</div>
+                                        <small class="opacity-75">Requires cooling/freezing</small>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="temperatureSensitive" name="temperature_sensitive"
+                                    value="false">
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg py-3" id="analyzeBtn">
+                                    <i class="fas fa-magic me-2"></i>Analyze Packaging
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div class="col-lg-4">
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-eye me-2"></i>Live Preview
+                        </h4>
+                    </div>
+
+                    <div class="preview-item">
+                        <div class="preview-label">Product Name</div>
+                        <div class="preview-value" id="previewName">Enter product name</div>
+                    </div>
+
+                    <div class="preview-item">
+                        <div class="preview-label">Food Type</div>
+                        <div class="preview-value" id="previewCategory">Select food type</div>
+                    </div>
+
+                    <div class="preview-item">
+                        <div class="preview-label">Weight</div>
+                        <div class="preview-value" id="previewWeight">0.50 kg</div>
+                    </div>
+
+                    <div class="preview-item">
+                        <div class="preview-label">Fragility Level</div>
+                        <div class="preview-value" id="previewFragility">5 / 10</div>
+                    </div>
+
+                    <div class="preview-item">
+                        <div class="preview-label">Temperature Sensitive</div>
+                        <div class="preview-value" id="previewTemp">No</div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top">
+                        <h6 class="mb-3">Analysis Tips:</h6>
+                        <ul class="list-unstyled small">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Be specific with product names
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Accurate weight improves recommendations
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Correct fragility ensures proper protection
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Temperature needs affect material selection
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize form
+        initializeForm();
+
+        // Set up event listeners
+        setupEventListeners();
+    });
+
+    function initializeForm() {
+        // Set initial values
+        document.getElementById('productWeight').value = 0.5;
+        document.getElementById('fragilityLevel').value = 5;
+
+        // Update displays
+        updateWeightDisplay();
+        updateFragilityDisplay();
+
+        // Select first food type by default
+        selectFoodType('dry');
+
+        // Select "No" for temperature by default
+        selectTemperature(false);
+    }
+
+    function setupEventListeners() {
+        // Product name input
+        document.getElementById('productName').addEventListener('input', function () {
+            const name = this.value.trim() || 'Enter product name';
+            document.getElementById('previewName').textContent = name;
+        });
+
+        // Weight slider
+        document.getElementById('productWeight').addEventListener('input', updateWeightDisplay);
+
+        // Fragility slider
+        document.getElementById('fragilityLevel').addEventListener('input', updateFragilityDisplay);
+
+        // Food type selection
+        document.querySelectorAll('.food-type-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const type = this.getAttribute('data-type');
+                selectFoodType(type);
+            });
+        });
+
+        // Temperature selection
+        document.querySelectorAll('.temp-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const isSensitive = this.getAttribute('data-temp') === 'true';
+                selectTemperature(isSensitive);
+            });
+        });
+
+        // Form submission
+        document.getElementById('productForm').addEventListener('submit', handleFormSubmit);
+    }
+
+    function updateWeightDisplay() {
+        const slider = document.getElementById('productWeight');
+        const value = parseFloat(slider.value).toFixed(2);
+        document.getElementById('weightValue').textContent = `${value} kg`;
+        document.getElementById('previewWeight').textContent = `${value} kg`;
+    }
+
+    function updateFragilityDisplay() {
+        const slider = document.getElementById('fragilityLevel');
+        const value = parseInt(slider.value);
+        document.getElementById('fragilityValue').textContent = `${value} / 10`;
+        document.getElementById('previewFragility').textContent = `${value} / 10`;
+    }
+
+    function selectFoodType(type) {
+        // Update UI
+        document.querySelectorAll('.food-type-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+
+        const selectedCard = document.querySelector(`.food-type-card[data-type="${type}"]`);
+        if (selectedCard) {
+            selectedCard.classList.add('selected');
+        }
+
+        // Update form field
+        document.getElementById('foodType').value = type;
+
+        // Update preview
+        const typeNames = {
+            'dry': 'Dry Food',
+            'fresh': 'Fresh Produce',
+            'frozen': 'Frozen Food',
+            'liquid': 'Liquid Food',
+            'ready': 'Ready-to-Eat',
+            'bakery': 'Bakery Items'
+        };
+
+        document.getElementById('previewCategory').textContent = typeNames[type] || 'Select food type';
+    }
+
+    function selectTemperature(isSensitive) {
+        // Update UI
+        document.querySelectorAll('.temp-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        const selectedBtn = document.querySelector(`.temp-btn[data-temp="${isSensitive}"]`);
+        if (selectedBtn) {
+            selectedBtn.classList.add('selected');
+        }
+
+        // Update form field
+        document.getElementById('temperatureSensitive').value = isSensitive;
+
+        // Update preview
+        document.getElementById('previewTemp').textContent = isSensitive ? 'Yes' : 'No';
+    }
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+
+        // Validate form
+        if (!validateForm()) {
+            return;
+        }
+
+        // Get form data
+        const formData = {
+            product_name: document.getElementById('productName').value.trim(),
+            food_type: document.getElementById('foodType').value,
+            weight_kg: parseFloat(document.getElementById('productWeight').value),
+            fragility_level: parseInt(document.getElementById('fragilityLevel').value),
+            temperature_sensitive: document.getElementById('temperatureSensitive').value === 'true'
+        };
+
+        // Show loading overlay
+        showLoading();
+
+        try {
+            // Analyze product
+            const result = await window.EcoPackAI.ProductAnalysisManager.analyze(formData);
+
+            // Store recommendations
+            if (result.recommendations) {
+                localStorage.setItem('currentRecommendations', JSON.stringify({
+                    product: result.product_name,
+                    recommendations: result.recommendations,
+                    timestamp: new Date().toISOString()
+                }));
+            }
+
+            // Show success message
+            showSuccess('Analysis complete! Redirecting to recommendations...');
+
+            // Redirect after delay
+            setTimeout(() => {
+                window.location.href = '/recommendations';
+            }, 1500);
+
+        } catch (error) {
+            console.error('Analysis error:', error);
+
+            // Hide loading overlay
+            hideLoading();
+
+            // Show error message
+            let errorMessage = 'Analysis failed. Please try again.';
+            if (error.message.includes('Session expired')) {
+                errorMessage = 'Your session has expired. Please log in again.';
+                setTimeout(() => window.location.href = '/login', 2000);
+            } else if (error.message.includes('Invalid input')) {
+                errorMessage = 'Please check your input values and try again.';
+            }
+
+            showError(errorMessage);
+        }
+    }
+
+    function validateForm() {
+        const productName = document.getElementById('productName').value.trim();
+        const foodType = document.getElementById('foodType').value;
+
+        // Clear previous errors
+        clearErrors();
+
+        let isValid = true;
+
+        // Validate product name
+        if (!productName) {
+            showFieldError('productName', 'Please enter a product name');
+            isValid = false;
+        } else if (productName.length < 2) {
+            showFieldError('productName', 'Product name must be at least 2 characters');
+            isValid = false;
+        }
+
+        // Validate food type
+        if (!foodType) {
+            showFieldError('foodType', 'Please select a food type');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const formGroup = field.closest('.mb-4') || field.parentElement;
+
+        // Add error class to field
+        field.classList.add('is-invalid');
+
+        // Create or update error message
+        let errorElement = formGroup.querySelector('.invalid-feedback');
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'invalid-feedback';
+            formGroup.appendChild(errorElement);
+        }
+
+        errorElement.textContent = message;
+    }
+
+    function clearErrors() {
+        // Remove error classes
+        document.querySelectorAll('.is-invalid').forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+
+        // Remove error messages
+        document.querySelectorAll('.invalid-feedback').forEach(element => {
+            element.remove();
+        });
+    }
+
+    function showLoading() {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        document.getElementById('analyzeBtn').disabled = true;
+        document.getElementById('analyzeBtn').innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Analyzing...
+    `;
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingOverlay').style.display = 'none';
+        document.getElementById('analyzeBtn').disabled = false;
+        document.getElementById('analyzeBtn').innerHTML = `
+        <i class="fas fa-magic me-2"></i>Analyze Packaging
+    `;
+    }
+
+    function showSuccess(message) {
+        // Create success alert
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-success alert-dismissible fade show';
+        alert.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+        // Insert before form
+        const form = document.getElementById('productForm');
+        form.parentNode.insertBefore(alert, form);
+
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 3000);
+    }
+
+    function showError(message) {
+        // Create error alert
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-danger alert-dismissible fade show';
+        alert.innerHTML = `
+        <i class="fas fa-exclamation-circle me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+        // Insert before form
+        const form = document.getElementById('productForm');
+        form.parentNode.insertBefore(alert, form);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    }
+
+    // Food type descriptions for tooltips
+    const foodTypeInfo = {
+        'dry': {
+            icon: 'fa-wheat-alt',
+            name: 'Dry Food',
+            desc: 'Non-perishable items like grains, cereals, snacks. Requires moisture protection.',
+            materials: 'Cardboard, paper, certain plastics'
+        },
+        'fresh': {
+            icon: 'fa-apple-alt',
+            name: 'Fresh Produce',
+            desc: 'Fruits, vegetables, herbs that need ventilation and moisture control.',
+            materials: 'Breathable materials, biodegradable packaging'
+        },
+        'frozen': {
+            icon: 'fa-snowflake',
+            name: 'Frozen Food',
+            desc: 'Items requiring insulation and moisture protection for low temperatures.',
+            materials: 'Insulated materials, moisture-resistant packaging'
+        },
+        'liquid': {
+            icon: 'fa-wine-bottle',
+            name: 'Liquid Food',
+            desc: 'Beverages, sauces, oils that need leak-proof and secure packaging.',
+            materials: 'Glass, certain plastics, tetrapak'
+        },
+        'ready': {
+            icon: 'fa-microwave',
+            name: 'Ready-to-Eat',
+            desc: 'Prepared meals needing microwave-safe and temperature-resistant materials.',
+            materials: 'Microwave-safe plastics, paperboard'
+        },
+        'bakery': {
+            icon: 'fa-bread-slice',
+            name: 'Bakery Items',
+            desc: 'Bread, pastries, cakes needing moisture control and structural support.',
+            materials: 'Paper, cardboard, breathable plastics'
+        }
+    };
+
+    // Add tooltips to food type cards
+    document.querySelectorAll('.food-type-card').forEach(card => {
+        const type = card.getAttribute('data-type');
+        const info = foodTypeInfo[type];
+
+        if (info) {
+            card.setAttribute('title', `${info.name}: ${info.desc}`);
+            card.setAttribute('data-bs-toggle', 'tooltip');
+            card.setAttribute('data-bs-placement', 'top');
+        }
+    });
+
+    // Initialize Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}

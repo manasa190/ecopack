@@ -1,0 +1,1153 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendations - EcoPackAI{% endblock %}
+{% block page_title %}Material Recommendations{% endblock %}
+
+{% block extra_css %}
+<style>
+    .recommendations-header {
+        background: linear-gradient(135deg, rgba(25, 135, 84, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(25, 135, 84, 0.2);
+    }
+
+    .recommendation-card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .recommendation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .rank-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        z-index: 1;
+    }
+
+    .rank-1 {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    }
+
+    .rank-2 {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+    }
+
+    .rank-3 {
+        background: linear-gradient(135deg, #20c997, #198754);
+        color: white;
+        box-shadow: 0 4px 15px rgba(32, 201, 151, 0.4);
+    }
+
+    .rank-other {
+        background: #f8f9fa;
+        color: #495057;
+        border: 2px solid #dee2e6;
+    }
+
+    .score-display {
+        font-size: 2.5rem;
+        font-weight: 800;
+        line-height: 1;
+        margin: 1rem 0;
+        background: linear-gradient(135deg, #198754, #0f5132);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .material-name {
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #212529;
+    }
+
+    .material-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        min-height: 40px;
+    }
+
+    .metric-item {
+        margin-bottom: 1rem;
+    }
+
+    .metric-label {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .progress-small {
+        height: 6px;
+        border-radius: 3px;
+        background: #e9ecef;
+        overflow: hidden;
+    }
+
+    .progress-small .progress-bar {
+        border-radius: 3px;
+    }
+
+    .comparison-table {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .table-header {
+        background: linear-gradient(135deg, #198754, #0f5132);
+        color: white;
+        padding: 1.5rem;
+    }
+
+    .table-body {
+        padding: 0;
+    }
+
+    .table-row {
+        display: flex;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+        align-items: center;
+    }
+
+    .table-row:last-child {
+        border-bottom: none;
+    }
+
+    .table-row:hover {
+        background: #f8f9fa;
+    }
+
+    .table-cell {
+        flex: 1;
+        padding: 0.5rem;
+    }
+
+    .table-cell:first-child {
+        flex: 2;
+        font-weight: 600;
+    }
+
+    .filter-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+    }
+
+    .filter-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+
+    .filter-group {
+        margin-bottom: 1rem;
+    }
+
+    .filter-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6c757d;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .action-buttons .btn {
+        flex: 1;
+    }
+
+    .material-details {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    .detail-value {
+        font-weight: 600;
+        color: #212529;
+    }
+
+    @media (max-width: 768px) {
+        .recommendations-header {
+            padding: 1.5rem;
+        }
+
+        .score-display {
+            font-size: 2rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .table-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .table-cell {
+            width: 100%;
+            padding: 0.25rem 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="recommendations-header">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="fw-bold mb-2">Material Recommendations</h1>
+                <p class="mb-0 text-muted" id="productTitle">
+                    Analysis results for your product
+                </p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="/product-input" class="btn btn-outline-success me-2">
+                    <i class="fas fa-plus me-1"></i>New Analysis
+                </a>
+                <button class="btn btn-success" onclick="exportRecommendations()">
+                    <i class="fas fa-download me-1"></i>Export
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-section">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="filter-group">
+                    <div class="filter-label">Sort By</div>
+                    <select class="form-select" id="sortBy" onchange="sortRecommendations()">
+                        <option value="score">Score (Highest First)</option>
+                        <option value="co2">CO₂ Reduction</option>
+                        <option value="cost">Cost Savings</option>
+                        <option value="recyclability">Recyclability</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="filter-group">
+                    <div class="filter-label">Material Type</div>
+                    <select class="form-select" id="materialType" onchange="filterRecommendations()">
+                        <option value="all">All Materials</option>
+                        <option value="biodegradable">Biodegradable</option>
+                        <option value="recyclable">Highly Recyclable</option>
+                        <option value="cost_effective">Cost Effective</option>
+                        <option value="strong">High Strength</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="filter-group">
+                    <div class="filter-label">Min. Score</div>
+                    <input type="range" class="form-range" id="scoreRange" min="0" max="10" step="0.1" value="0">
+                    <div class="d-flex justify-content-between">
+                        <small>0</small>
+                        <small id="scoreRangeValue">0.0</small>
+                        <small>10</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="filter-group">
+                    <div class="filter-label">Actions</div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="compareSelected()">
+                            <i class="fas fa-balance-scale me-1"></i>Compare Selected
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="resetFilters()">
+                            <i class="fas fa-redo me-1"></i>Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Grid -->
+    <div class="row g-4" id="recommendationsGrid">
+        <!-- Cards will be loaded here by JavaScript -->
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h4 class="mb-3">No Recommendations Found</h4>
+                <p class="text-muted mb-4">Start by analyzing a food product to get packaging recommendations.</p>
+                <a href="/product-input" class="btn btn-success">
+                    <i class="fas fa-play-circle me-2"></i>Start First Analysis
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison View (Hidden by default) -->
+    <div class="comparison-table mt-4" id="comparisonView" style="display: none;">
+        <div class="table-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Material Comparison</h4>
+                <button class="btn btn-light btn-sm" onclick="hideComparison()">
+                    <i class="fas fa-times me-1"></i>Close
+                </button>
+            </div>
+        </div>
+        <div class="table-body" id="comparisonBody">
+            <!-- Comparison rows will be added here -->
+        </div>
+    </div>
+
+    <!-- Selection Summary -->
+    <div class="alert alert-success mt-4" id="selectionAlert" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="selectedCount">0</span> material(s) selected for comparison
+            </div>
+            <div>
+                <button class="btn btn-sm btn-outline-success me-2" onclick="clearSelection()">
+                    Clear All
+                </button>
+                <button class="btn btn-sm btn-success" onclick="compareSelected()">
+                    Compare Selected
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Material Details Modal -->
+    <div class="modal fade" id="materialModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMaterialName">Material Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalMaterialContent">
+                    <!-- Content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="modalSelectBtn">Select This Material</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let recommendations = [];
+    let selectedMaterials = new Set();
+    let currentFilters = {
+        sortBy: 'score',
+        materialType: 'all',
+        minScore: 0
+    };
+
+    // --- Eco Certificate Generation ---
+    function generateEcoCertificate() {
+        // Check if we have recommendations
+        let data = [];
+        try {
+            const stored = localStorage.getItem('currentRecommendations');
+            if (stored) {
+                data = JSON.parse(stored).recommendations || [];
+            }
+        } catch (e) {
+            console.error(e);
+        }
+
+        if (!data || data.length === 0) {
+            alert('No recommendations available to certify. Please run an analysis first.');
+            return;
+        }
+
+        const topRec = data[0];
+        // Check score threshold (e.g. must be > 7.0 to be "Eco Certified")
+        const score = (topRec.score * 10).toFixed(1);
+
+        if (score < 7.0) {
+            alert('Product score must be at least 7.0/10 to earn a Sustainability Certificate.');
+            return;
+        }
+
+        // Create canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 800;
+        const ctx = canvas.getContext('2d');
+
+        // Draw Background
+        const gradient = ctx.createLinearGradient(0, 0, 1200, 800);
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(1, '#f0fdf4');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1200, 800);
+
+        // Draw Border
+        ctx.strokeStyle = '#10B981';
+        ctx.lineWidth = 30;
+        ctx.strokeRect(40, 40, 1120, 720);
+
+        ctx.strokeStyle = '#D1FAE5';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(65, 65, 1070, 670);
+
+        // Header
+        ctx.fillStyle = '#064E3B';
+        ctx.font = 'bold 80px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Certificate of Sustainability', 600, 180);
+
+        // Subtext
+        ctx.fillStyle = '#4B5563';
+        ctx.font = '30px sans-serif';
+        ctx.fillText('This certifies that the packaging solution for', 600, 260);
+
+        // Product Name
+        const productTitle = document.getElementById('productTitle').innerText.replace('Analysis results for', '').trim();
+        const prodName = productTitle || "Your Product";
+
+        ctx.fillStyle = '#10B981';
+        ctx.font = 'bold italic 60px sans-serif';
+        ctx.fillText(prodName, 600, 350);
+
+        // Award text
+        ctx.fillStyle = '#4B5563';
+        ctx.font = '30px sans-serif';
+        ctx.fillText('has been evaluated by EcoPackAI and achieved an', 600, 430);
+
+        // Score Circle
+        ctx.beginPath();
+        ctx.arc(600, 550, 80, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ECFDF5';
+        ctx.fill();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#10B981';
+        ctx.stroke();
+
+        ctx.fillStyle = '#064E3B';
+        ctx.font = 'bold 60px sans-serif';
+        ctx.fillText(score, 600, 560);
+
+        ctx.font = '20px sans-serif';
+        ctx.fillStyle = '#6B7280';
+        ctx.fillText('ECO SCORE', 600, 590);
+
+        // Seal
+        ctx.font = 'italic 24px serif';
+        ctx.fillStyle = '#059669';
+        ctx.fillText('EcoPackAI Verified', 600, 680);
+
+        // Date
+        const date = new Date().toLocaleDateString();
+        ctx.font = '20px sans-serif';
+        ctx.fillStyle = '#9CA3AF';
+        ctx.fillText(`Issued: ${date}`, 1050, 730);
+
+        // Download
+        const link = document.createElement('a');
+        link.download = `EcoPackAI_Certificate_${prodName.replace(/[^a-z0-9]/gi, '_')}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        // Load recommendations from localStorage
+        await loadRecommendations();
+
+        // Set up event listeners
+        setupEventListeners();
+
+        // Initialize range display
+        updateRangeDisplay();
+    });
+
+    async function loadRecommendations() {
+        try {
+            const rawData = localStorage.getItem('currentRecommendations');
+
+            if (!rawData) {
+                showEmptyState();
+                return;
+            }
+
+            const data = JSON.parse(rawData);
+            recommendations = data.recommendations || [];
+
+            if (recommendations.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            // Update product title
+            const productTitle = document.getElementById('productTitle');
+            if (data.product) {
+                productTitle.textContent = `Analysis results for: ${data.product}`;
+            }
+
+            // Render recommendations
+            renderRecommendations();
+
+            // Show timestamp
+            if (data.timestamp) {
+                const timeAgo = getTimeAgo(data.timestamp);
+                productTitle.innerHTML += ` <small class="text-muted">(${timeAgo})</small>`;
+            }
+
+        } catch (error) {
+            console.error('Error loading recommendations:', error);
+            showEmptyState();
+            showError('Failed to load recommendations');
+        }
+    }
+
+    function renderRecommendations() {
+        const grid = document.getElementById('recommendationsGrid');
+
+        if (recommendations.length === 0) {
+            showEmptyState();
+            return;
+        }
+
+        // Apply filters and sorting
+        let filtered = [...recommendations];
+
+        // Filter by material type
+        if (currentFilters.materialType !== 'all') {
+            filtered = filtered.filter(rec => {
+                switch (currentFilters.materialType) {
+                    case 'biodegradable':
+                        return rec.biodegradability >= 7;
+                    case 'recyclable':
+                        return rec.recyclability >= 80;
+                    case 'cost_effective':
+                        return rec.cost_per_kg <= 3;
+                    case 'strong':
+                        return rec.strength >= 7;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Filter by minimum score
+        filtered = filtered.filter(rec => rec.score * 10 >= currentFilters.minScore);
+
+        // Sort
+        filtered.sort((a, b) => {
+            switch (currentFilters.sortBy) {
+                case 'co2':
+                    return b.co2_reduction_percent - a.co2_reduction_percent;
+                case 'cost':
+                    return b.cost_savings_percent - a.cost_savings_percent;
+                case 'recyclability':
+                    return b.recyclability - a.recyclability;
+                default: // score
+                    return b.score - a.score;
+            }
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+            <div class="col-12">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h4 class="mb-3">No Matching Results</h4>
+                    <p class="text-muted mb-4">Try adjusting your filters to see more recommendations.</p>
+                    <button class="btn btn-outline-success" onclick="resetFilters()">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        `;
+            return;
+        }
+
+        // Render cards
+        grid.innerHTML = filtered.map((rec, index) => {
+            const rank = index + 1;
+            const scoreOutOf10 = (rec.score * 10).toFixed(1);
+            const isSelected = selectedMaterials.has(rec.material_id);
+
+            return `
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="recommendation-card position-relative">
+                    <div class="rank-badge ${getRankClass(rank)}">
+                        ${rank}
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <div class="text-center mb-3">
+                            <div class="score-display">${scoreOutOf10}</div>
+                            <small class="text-muted">/ 10 score</small>
+                        </div>
+                        
+                        <h5 class="material-name text-center mb-2">${rec.material_name}</h5>
+                        <p class="material-description text-center">
+                            ${getMaterialDescription(rec)}
+                        </p>
+                        
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="metric-item">
+                                    <div class="metric-label">CO₂ Reduction</div>
+                                    <div class="metric-value text-success">${rec.co2_reduction_percent}%</div>
+                                    <div class="progress-small">
+                                        <div class="progress-bar bg-success" style="width: ${rec.co2_reduction_percent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="metric-item">
+                                    <div class="metric-label">Cost Savings</div>
+                                    <div class="metric-value text-primary">${rec.cost_savings_percent}%</div>
+                                    <div class="progress-small">
+                                        <div class="progress-bar bg-primary" style="width: ${rec.cost_savings_percent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="metric-item">
+                                    <div class="metric-label">Recyclability</div>
+                                    <div class="metric-value">${rec.recyclability}%</div>
+                                    <div class="progress-small">
+                                        <div class="progress-bar bg-info" style="width: ${rec.recyclability}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="metric-item">
+                                    <div class="metric-label">Strength</div>
+                                    <div class="metric-value">${rec.strength}/10</div>
+                                    <div class="progress-small">
+                                        <div class="progress-bar bg-warning" style="width: ${rec.strength * 10}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn ${isSelected ? 'btn-success' : 'btn-outline-success'}" 
+                                    onclick="toggleSelection(${rec.material_id}, this)">
+                                <i class="fas ${isSelected ? 'fa-check' : 'fa-plus'} me-1"></i>
+                                ${isSelected ? 'Selected' : 'Compare'}
+                            </button>
+                            <button class="btn btn-outline-primary" 
+                                    onclick="showMaterialDetails(${JSON.stringify(rec).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-info-circle me-1"></i>Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        }).join('');
+    }
+
+    function getRankClass(rank) {
+        switch (rank) {
+            case 1: return 'rank-1';
+            case 2: return 'rank-2';
+            case 3: return 'rank-3';
+            default: return 'rank-other';
+        }
+    }
+
+    function getMaterialDescription(rec) {
+        const descriptions = [];
+
+        if (rec.co2_reduction_percent >= 70) descriptions.push('Excellent for environment');
+        if (rec.cost_savings_percent >= 60) descriptions.push('Great cost savings');
+        if (rec.recyclability >= 90) descriptions.push('Highly recyclable');
+        if (rec.strength >= 8) descriptions.push('Very strong');
+        if (rec.biodegradability >= 8) descriptions.push('Biodegradable');
+
+        return descriptions.length > 0
+            ? descriptions.join(' • ')
+            : 'Sustainable packaging option';
+    }
+
+    function setupEventListeners() {
+        // Score range slider
+        const scoreRange = document.getElementById('scoreRange');
+        scoreRange.addEventListener('input', function () {
+            currentFilters.minScore = parseFloat(this.value);
+            document.getElementById('scoreRangeValue').textContent = this.value;
+            renderRecommendations();
+        });
+    }
+
+    function updateRangeDisplay() {
+        const scoreRange = document.getElementById('scoreRange');
+        document.getElementById('scoreRangeValue').textContent = scoreRange.value;
+    }
+
+    function sortRecommendations() {
+        currentFilters.sortBy = document.getElementById('sortBy').value;
+        renderRecommendations();
+    }
+
+    function filterRecommendations() {
+        currentFilters.materialType = document.getElementById('materialType').value;
+        renderRecommendations();
+    }
+
+    function resetFilters() {
+        document.getElementById('sortBy').value = 'score';
+        document.getElementById('materialType').value = 'all';
+        document.getElementById('scoreRange').value = 0;
+
+        currentFilters = {
+            sortBy: 'score',
+            materialType: 'all',
+            minScore: 0
+        };
+
+        updateRangeDisplay();
+        renderRecommendations();
+    }
+
+    function toggleSelection(materialId, button) {
+        if (selectedMaterials.has(materialId)) {
+            selectedMaterials.delete(materialId);
+            button.classList.remove('btn-success');
+            button.classList.add('btn-outline-success');
+            button.innerHTML = '<i class="fas fa-plus me-1"></i>Compare';
+        } else {
+            selectedMaterials.add(materialId);
+            button.classList.remove('btn-outline-success');
+            button.classList.add('btn-success');
+            button.innerHTML = '<i class="fas fa-check me-1"></i>Selected';
+        }
+
+        updateSelectionAlert();
+    }
+
+    function clearSelection() {
+        selectedMaterials.clear();
+        renderRecommendations();
+        updateSelectionAlert();
+    }
+
+    function updateSelectionAlert() {
+        const alert = document.getElementById('selectionAlert');
+        const countElement = document.getElementById('selectedCount');
+
+        if (selectedMaterials.size > 0) {
+            countElement.textContent = selectedMaterials.size;
+            alert.style.display = 'block';
+        } else {
+            alert.style.display = 'none';
+        }
+    }
+
+    function compareSelected() {
+        if (selectedMaterials.size < 2) {
+            showError('Please select at least 2 materials to compare');
+            return;
+        }
+
+        const selectedRecs = recommendations.filter(rec =>
+            selectedMaterials.has(rec.material_id)
+        );
+
+        showComparison(selectedRecs);
+    }
+
+    function showComparison(materials) {
+        const comparisonBody = document.getElementById('comparisonBody');
+        const comparisonView = document.getElementById('comparisonView');
+
+        // Create comparison table
+        let tableHTML = '';
+
+        // Header row
+        tableHTML += `
+        <div class="table-row">
+            <div class="table-cell"><strong>Metric</strong></div>
+            ${materials.map(rec => `
+                <div class="table-cell text-center">
+                    <strong>${rec.material_name}</strong>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+        // Score row
+        tableHTML += createComparisonRow('Score', materials, rec => (rec.score * 10).toFixed(1) + '/10');
+
+        // CO2 Reduction row
+        tableHTML += createComparisonRow('CO₂ Reduction', materials, rec => rec.co2_reduction_percent + '%');
+
+        // Cost Savings row
+        tableHTML += createComparisonRow('Cost Savings', materials, rec => rec.cost_savings_percent + '%');
+
+        // Recyclability row
+        tableHTML += createComparisonRow('Recyclability', materials, rec => rec.recyclability + '%');
+
+        // Strength row
+        tableHTML += createComparisonRow('Strength', materials, rec => rec.strength + '/10');
+
+        // Cost per kg row
+        tableHTML += createComparisonRow('Cost per kg', materials, rec => '₹' + rec.cost_per_kg);
+
+        // Biodegradability row
+        tableHTML += createComparisonRow('Biodegradability', materials, rec => rec.biodegradability + '/10');
+
+        comparisonBody.innerHTML = tableHTML;
+        comparisonView.style.display = 'block';
+
+        // Scroll to comparison
+        comparisonView.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function createComparisonRow(label, materials, getValue) {
+        const values = materials.map(getValue);
+        return `
+        <div class="table-row">
+            <div class="table-cell">${label}</div>
+            ${values.map(value => `
+                <div class="table-cell text-center">${value}</div>
+            `).join('')}
+        </div>
+    `;
+    }
+
+    function hideComparison() {
+        document.getElementById('comparisonView').style.display = 'none';
+    }
+
+    function showMaterialDetails(material) {
+        const modal = new bootstrap.Modal(document.getElementById('materialModal'));
+        const modalContent = document.getElementById('modalMaterialContent');
+        const modalTitle = document.getElementById('modalMaterialName');
+        const selectBtn = document.getElementById('modalSelectBtn');
+
+        modalTitle.textContent = material.material_name;
+
+        // Create details content
+        modalContent.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <div class="material-details">
+                    <h6 class="mb-3">Performance Metrics</h6>
+                    <div class="detail-item">
+                        <span class="detail-label">Overall Score</span>
+                        <span class="detail-value">${(material.score * 10).toFixed(1)}/10</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">CO₂ Reduction</span>
+                        <span class="detail-value text-success">${material.co2_reduction_percent}%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cost Savings</span>
+                        <span class="detail-value text-primary">${material.cost_savings_percent}%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Recyclability</span>
+                        <span class="detail-value">${material.recyclability}%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="material-details">
+                    <h6 class="mb-3">Material Properties</h6>
+                    <div class="detail-item">
+                        <span class="detail-label">Strength Rating</span>
+                        <span class="detail-value">${material.strength}/10</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Biodegradability</span>
+                        <span class="detail-value">${material.biodegradability}/10</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Cost per kg</span>
+                        <span class="detail-value">₹${material.cost_per_kg}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Weight Capacity</span>
+                        <span class="detail-value">${material.weight_capacity} kg</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <h6>Best Used For:</h6>
+            <ul class="list-unstyled">
+                ${getUsageSuggestions(material).map(suggestion => `
+                    <li class="mb-1">
+                        <i class="fas fa-check text-success me-2"></i>
+                        ${suggestion}
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+        
+        <div class="alert alert-info mt-3">
+            <i class="fas fa-lightbulb me-2"></i>
+            <strong>Tip:</strong> ${getMaterialTip(material)}
+        </div>
+    `;
+
+        // Update select button
+        selectBtn.onclick = function () {
+            selectMaterial(material.material_id);
+            modal.hide();
+        };
+
+        modal.show();
+    }
+
+    function getUsageSuggestions(material) {
+        const suggestions = [];
+
+        if (material.co2_reduction_percent >= 70) {
+            suggestions.push('Products where sustainability is a key selling point');
+        }
+
+        if (material.cost_savings_percent >= 60) {
+            suggestions.push('Cost-sensitive product lines');
+        }
+
+        if (material.strength >= 8) {
+            suggestions.push('Heavy or fragile items');
+        }
+
+        if (material.recyclability >= 90) {
+            suggestions.push('Markets with strong recycling infrastructure');
+        }
+
+        if (material.biodegradability >= 8) {
+            suggestions.push('Compostable product lines');
+        }
+
+        if (suggestions.length === 0) {
+            suggestions.push('General food packaging applications');
+        }
+
+        return suggestions;
+    }
+
+    function getMaterialTip(material) {
+        if (material.score * 10 >= 8) {
+            return 'This is one of our top recommendations for most applications.';
+        } else if (material.co2_reduction_percent >= 80) {
+            return 'Excellent choice if reducing environmental impact is your priority.';
+        } else if (material.cost_savings_percent >= 70) {
+            return 'Great option for maximizing cost savings.';
+        } else {
+            return 'Consider this material based on your specific requirements.';
+        }
+    }
+
+    function selectMaterial(materialId) {
+        selectedMaterials.add(materialId);
+        renderRecommendations();
+        updateSelectionAlert();
+
+        showSuccess('Material added to comparison');
+    }
+
+    function exportRecommendations() {
+        if (recommendations.length === 0) {
+            showError('No recommendations to export');
+            return;
+        }
+
+        // Create CSV content
+        const headers = ['Rank', 'Material', 'Score', 'CO2 Reduction', 'Cost Savings', 'Recyclability', 'Strength', 'Cost per kg'];
+        const rows = recommendations.map((rec, index) => [
+            index + 1,
+            rec.material_name,
+            (rec.score * 10).toFixed(1),
+            rec.co2_reduction_percent + '%',
+            rec.cost_savings_percent + '%',
+            rec.recyclability + '%',
+            rec.strength + '/10',
+            '₹' + rec.cost_per_kg
+        ]);
+
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.join(','))
+        ].join('\n');
+
+        // Create and download file
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'EcoPackAI_Recommendations.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+
+        showSuccess('Recommendations exported successfully');
+    }
+
+    function getTimeAgo(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) {
+            return 'Just now';
+        } else if (diffMins < 60) {
+            return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+        } else if (diffHours < 24) {
+            return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+        } else if (diffDays < 7) {
+            return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+        } else {
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+    }
+
+    function showEmptyState() {
+        const grid = document.getElementById('recommendationsGrid');
+        grid.innerHTML = `
+        <div class="col-12">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h4 class="mb-3">No Recommendations Found</h4>
+                <p class="text-muted mb-4">Start by analyzing a food product to get packaging recommendations.</p>
+                <a href="/product-input" class="btn btn-success">
+                    <i class="fas fa-play-circle me-2"></i>Start First Analysis
+                </a>
+            </div>
+        </div>
+    `;
+    }
+
+    function showSuccess(message) {
+        // Create success alert
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-success alert-dismissible fade show';
+        alert.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+        // Insert after header
+        const header = document.querySelector('.recommendations-header');
+        header.parentNode.insertBefore(alert, header.nextSibling);
+
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 3000);
+    }
+
+    function showError(message) {
+        // Create error alert
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-danger alert-dismissible fade show';
+        alert.innerHTML = `
+        <i class="fas fa-exclamation-circle me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+        // Insert after header
+        const header = document.querySelector('.recommendations-header');
+        header.parentNode.insertBefore(alert, header.nextSibling);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    }
+
+    // Auto-refresh recommendations every 30 seconds
+    setInterval(() => {
+        const hasRecommendations = recommendations.length > 0;
+        if (hasRecommendations) {
+            loadRecommendations();
+        }
+    }, 30000);
+</script>
+{% endblock %}
