@@ -6,11 +6,6 @@ It analyzes product attributes and packaging material properties to recommend op
 
 The system helps organizations reduce environmental impact and improve compliance by enabling **data-driven decisions for green supply chains**.
 
----
-
-## 🚀 Live Project
-👉 **Live Demo:**  
-
 
 ---
 
